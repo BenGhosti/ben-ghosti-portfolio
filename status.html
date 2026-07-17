@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta content="Ben Ghosti — Live system status for all lab infrastructure, servers, and services." name="description"/>
+<meta content="#090b0e" name="theme-color"/>
+<title>System Status — Ben Ghosti</title>
+<link href="assets/images/logo.png" rel="icon" type="image/png"/>
+<link href="assets/css/fonts.css" rel="stylesheet"/>
+<link href="assets/css/style.css" rel="stylesheet"/>
+<link rel="canonical" href="https://ben-ghosti.de/status.html" />
+</head>
+<body class="status-page">
+<!-- ── Cursor & Glow (global) ─────────────────────────────────── -->
+<div aria-hidden="true" class="global-glow" data-global-glow=""></div>
+<div aria-hidden="true" class="cursor-dot" data-cursor-dot=""></div>
+<div aria-hidden="true" class="cursor-ring" data-cursor-ring=""></div>
+<!-- ── Navigation ────────────────────────────────────────────── -->
+<header class="nav-bar" data-nav="">
+<div class="nav-inner">
+<a aria-label="Ben Ghosti home" class="nav-brand" href="./index.html">
+<img alt="Ben Ghosti logo" class="brand-mark" src="assets/images/logo.png"/>
+</a>
+<nav aria-label="Primary" class="nav-links" id="primary-nav">
+<a class="nav-link" href="./index.html">Home</a>
+<a class="nav-link" href="./index.html#domains">Skills</a>
+<a class="nav-link" href="./index.html#projects">Projects</a>
+<a class="nav-link" href="./sponsors.html">Sponsors</a>
+<a class="nav-link active" href="./status.html">Status</a>
+<a class="nav-link" href="./index.html#links">Links</a>
+</nav>
+<button aria-controls="primary-nav" aria-expanded="false" aria-label="Toggle navigation" class="nav-toggle" data-nav-toggle="" type="button">
+<span class="toggle-bar"></span>
+<span class="toggle-bar"></span>
+<span class="toggle-bar"></span>
+</button>
+</div>
+</header>
+<!-- ── Status iframe ─────────────────────────────────────────── -->
+<main class="kuma-main">
+<!--
+      Thin accent bar above the iframe — signals the page is "live".
+      Pure CSS, zero JS dependency.
+    -->
+<div aria-hidden="true" class="kuma-topbar">
+<span class="kuma-topbar-led"></span>
+<span class="kuma-topbar-label">LIVE · SYSTEM STATUS</span>
+<span class="kuma-topbar-url">status.ben-ghosti.de</span>
+</div>
+<iframe allow="fullscreen" class="kuma-iframe" loading="eager" src="https://status.ben-ghosti.de/status/public" title="System Status — Ben Ghosti Infrastructure"></iframe>
+</main>
+<script src="assets/js/main.js"></script>
+</body>
+</html>

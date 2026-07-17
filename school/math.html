@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quadratische Gleichungen lösen - Klasse 10</title>
+    <link rel="stylesheet" href="style.css?v=3">
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════════
+     NAVIGATION
+═══════════════════════════════════════════════════════════ -->
+
+<nav class="navbar">
+    <div class="container">
+        <div class="navbar-brand">
+            <span>📐 Quadratische Gleichungen</span>
+        </div>
+        <button class="nav-toggle" aria-label="Navigation togglen">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        <div class="nav-links">
+            <a href="#home"           class="nav-link">Home</a>
+            <a href="#lernen"         class="nav-link">Lernen</a>
+            <a href="#visualisierung" class="nav-link">Graphen</a>
+            <a href="#faq"            class="nav-link">FAQ</a>
+            <a href="#quiz"           class="nav-link">Quiz</a>
+        </div>
+        <a href="https://ben-ghosti.de" target="_blank" rel="noopener" class="btn btn-primary btn-sm nav-portfolio-btn">
+            ← Portfolio
+        </a>
+    </div>
+</nav>
+
+<!-- ═══════════════════════════════════════════════════════════
+     HERO SECTION
+═══════════════════════════════════════════════════════════ -->
+
+<section id="home" class="hero">
+    <div class="container">
+        <div class="hero-content">
+            <h1 class="hero-title">Quadratische Gleichungen meistern</h1>
+            <p class="hero-subtitle">Lerne die PQ-Formel und Quadratische Ergänzung verstehen</p>
+            <p class="hero-description">
+                Ein interaktives Lernmodul für Klasse 10 mit Visualisierungen,
+                Erklärungen und einem Quiz zur Selbstkontrolle.
+            </p>
+            <div class="hero-buttons">
+                <a href="#quiz" class="btn btn-primary">Zum Quiz →</a>
+                <a href="https://ben-ghosti.de" target="_blank" rel="noopener" class="btn btn-primary">
+                    ← Zurück zum Portfolio
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════
+     LERN-INHALTE (3 CARDS)
+═══════════════════════════════════════════════════════════ -->
+
+<section id="lernen" class="learning-section">
+    <div class="container">
+        <h2 class="section-title">Grundlagen verstehen</h2>
+        <p class="section-subtitle">Verstehe die Grundlagen, bevor du die Gleichungen löst.</p>
+
+        <div class="cards-grid">
+
+            <!-- Card 1 -->
+            <div class="card">
+                <div class="card-icon">📝</div>
+                <h3>Quadratische Gleichungen</h3>
+                <p>Eine quadratische Gleichung hat die allgemeine Form:</p>
+                <div class="formula">ax² + bx + c = 0 &nbsp; (mit a ≠ 0)</div>
+                <p>
+                    Bevor wir die PQ-Formel anwenden können, muss die Gleichung
+                    in die <strong>Normalform</strong> gebracht werden:
+                </p>
+                <div class="formula">x² + px + q = 0</div>
+                <p>Dazu dividieren wir alle Terme durch den Koeffizienten a.</p>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="card">
+                <div class="card-icon">🔢</div>
+                <h3>Die PQ-Formel</h3>
+                <p>Die PQ-Formel ist eine universelle Lösungsmethode für quadratische Gleichungen in Normalform:</p>
+                <div class="formula">x = −p/2 ± √( (p/2)² − q )</div>
+                <p>Der Ausdruck unter der Wurzel heißt <strong>Diskriminante D</strong>:</p>
+                <div class="formula">D = (p/2)² − q</div>
+                <ul class="card-list">
+                    <li><strong>D &gt; 0:</strong> 2 verschiedene Lösungen</li>
+                    <li><strong>D = 0:</strong> 1 Lösung (doppelte Nullstelle)</li>
+                    <li><strong>D &lt; 0:</strong> keine reellen Lösungen</li>
+                </ul>
+            </div>
+
+            <!-- Card 3 -->
+            <div class="card">
+                <div class="card-icon">✨</div>
+                <h3>Quadratische Ergänzung</h3>
+                <p>Eine Umformungstechnik, um die Gleichung in ein lösbares Binom zu verwandeln:</p>
+                <ol class="card-list">
+                    <li>Konstante rechts: x² + px = −q</li>
+                    <li>Ergänze (p/2)²: x² + px + (p/2)² = (p/2)² − q</li>
+                    <li>Als Binom: (x + p/2)² = (p/2)² − q</li>
+                    <li>Wurzel ziehen: x + p/2 = ± √((p/2)² − q)</li>
+                    <li>Nach x auflösen: x = −p/2 ± √((p/2)² − q)</li>
+                </ol>
+                <p class="card-hint">→ Das ist genau die PQ-Formel!</p>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════
+     GEOGEBRA VISUALISIERUNG
+═══════════════════════════════════════════════════════════ -->
+
+<section id="visualisierung" class="visualization-section">
+    <div class="container">
+        <h2 class="section-title">Interaktive Graphen</h2>
+        <p class="section-subtitle">
+            Verschiebe die Schieberegler, um p und q zu ändern
+            und beobachte, wie sich die Parabel und ihre Nullstellen verändern.
+        </p>
+
+        <div class="geogebra-container">
+            <!-- Responsiver Wrapper: behält das Seitenverhältnis 711 × 605 -->
+            <div class="geogebra-wrapper">
+                <iframe
+                    scrolling="no"
+                    title="Parameter der quadratischen Funktionen"
+                    src="https://www.geogebra.org/material/iframe/id/ojvK4WoT/width/711/height/605/border/888888/sfsb/true/smb/false/stb/false/stbh/false/ai/false/asb/false/sri/false/rc/false/ld/false/sdz/false/ctl/false"
+                    style="border:0;">
+                </iframe>
+            </div>
+        </div>
+
+        <div class="visualization-hints">
+            <h3>💡 Beobachtungen:</h3>
+            <ul>
+                <li>Die <strong>Nullstellen</strong> (rote Punkte) sind die Lösungen der Gleichung</li>
+                <li>Die <strong>y-Achse</strong> schneidet die Parabel bei y = q</li>
+                <li>Die <strong>Symmetrieachse</strong> liegt bei x = −p/2</li>
+                <li>Je größer |D|, desto weiter sind die Nullstellen auseinander</li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════
+     FAQ ACCORDION
+═══════════════════════════════════════════════════════════ -->
+
+<section id="faq" class="faq-section">
+    <div class="container">
+        <h2 class="section-title">Häufig gestellte Fragen</h2>
+
+        <div class="accordion">
+
+            <div class="accordion-item">
+                <button class="accordion-header">
+                    <span>Wann nutze ich die PQ-Formel und wann die Quadratische Ergänzung?</span>
+                    <span class="accordion-icon">+</span>
+                </button>
+                <div class="accordion-content">
+                    <p><strong>PQ-Formel:</strong> Schneller, direkt anwenden wenn die Gleichung in Normalform (x² + px + q = 0) vorliegt.</p>
+                    <p><strong>Quadratische Ergänzung:</strong> Manueller Prozess, hilft zu verstehen, warum die PQ-Formel funktioniert. Nutze sie zum Lernen und Verständnis.</p>
+                    <p><em>In der Praxis: Nutze die PQ-Formel für schnelle Lösungen!</em></p>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <button class="accordion-header">
+                    <span>Was bedeutet es, wenn die Diskriminante negativ ist?</span>
+                    <span class="accordion-icon">+</span>
+                </button>
+                <div class="accordion-content">
+                    <p>Wenn D &lt; 0, können wir keine reelle Wurzel ziehen. Das bedeutet: <strong>Die Parabel schneidet die x-Achse nicht!</strong></p>
+                    <p>Sie liegt entweder komplett über oder komplett unter der x-Achse. Es gibt keine Lösungen in ℝ.</p>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <button class="accordion-header">
+                    <span>Wie bringe ich eine Gleichung in die Normalform?</span>
+                    <span class="accordion-icon">+</span>
+                </button>
+                <div class="accordion-content">
+                    <p><strong>Beispiel:</strong> 2x² + 8x + 6 = 0</p>
+                    <p><strong>Schritt 1:</strong> Dividiere alle Terme durch den Koeffizienten von x² (hier: 2)</p>
+                    <div class="formula">2x² + 8x + 6 = 0 | ÷ 2<br>x² + 4x + 3 = 0</div>
+                    <p>Jetzt ist die Gleichung in Normalform mit p = 4 und q = 3!</p>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <button class="accordion-header">
+                    <span>Kann ich auch komplexe Lösungen berechnen?</span>
+                    <span class="accordion-icon">+</span>
+                </button>
+                <div class="accordion-content">
+                    <p>Ja! In der Mathematik gibt es komplexe Zahlen mit der imaginären Einheit i. Wenn D &lt; 0, schreiben wir: √D = i·√|D|</p>
+                    <div class="formula">Beispiel: x² + 2x + 2 = 0<br>D = 1 − 2 = −1<br>x = −1 ± i</div>
+                    <p><em>In Klasse 10 konzentrierst du dich normalerweise nur auf reelle Lösungen.</em></p>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <button class="accordion-header">
+                    <span>Wie überprüfe ich meine Lösungen?</span>
+                    <span class="accordion-icon">+</span>
+                </button>
+                <div class="accordion-content">
+                    <p><strong>Probe:</strong> Setze deine Lösungen in die ursprüngliche Gleichung ein!</p>
+                    <div class="formula">
+                        x² + 4x + 3 = 0 &nbsp; → &nbsp; x₁ = −1, x₂ = −3<br><br>
+                        Für x = −1: (−1)² + 4·(−1) + 3 = 1 − 4 + 3 = 0 ✓<br>
+                        Für x = −3: (−3)² + 4·(−3) + 3 = 9 − 12 + 3 = 0 ✓
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════
+     QUIZ SECTION
+═══════════════════════════════════════════════════════════ -->
+
+<section id="quiz" class="quiz-section">
+    <div class="container">
+        <h2 class="section-title">Teste dein Wissen!</h2>
+        <p class="section-subtitle">
+            Beantworte die folgenden Fragen, um dein Verständnis zu überprüfen.
+        </p>
+
+        <!-- Scaffold: JS füllt diese drei Bereiche -->
+        <div id="quiz-container" class="quiz-container">
+            <div class="quiz-meta"></div>
+            <div class="quiz-pips"></div>
+            <div class="quiz-inner"></div>
+        </div>
+    </div>
+</section>
+
+
+<section id="notizen" class="notizen-section">
+  <h2 class="notizen-title">Mitschriften</h2>
+  <div class="notizen-grid">
+
+    <div class="notizen-card">
+      <div class="notizen-img-wrap">
+        <img src="mitschrift1.jpg" alt="Mitschrift 1" loading="lazy" class="notizen-img">
+      </div>
+      <a href="mitschrift1.jpg" class="notizen-btn" download>
+        ⬇ Herunterladen
+      </a>
+    </div>
+
+    <div class="notizen-card">
+      <div class="notizen-img-wrap">
+        <img src="mitschrift2.jpg" alt="Mitschrift 2" loading="lazy" class="notizen-img">
+      </div>
+      <a href="mitschrift2.jpg" class="notizen-btn" download>
+        ⬇ Herunterladen
+      </a>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     FOOTER
+═══════════════════════════════════════════════════════════ -->
+
+<footer class="footer">
+    <div class="container">
+        <p>© <span data-year></span> Quadratische Gleichungen Lernen — Klasse 10</p>
+        <p>Entwickelt von Ben - Gemacht für Schüler</p>
+        <a class="footer-legal-link" href="./legal.html">Impressum &amp; Datenschutz</a>
+    </div>
+</footer>
+
+<script src="main.js"></script>
+</body>
+</html>
