@@ -68,3 +68,7 @@ Web: ben-ghosti.de
 Mail: info@ben-ghosti.de
 Instagram: @ben_ghosti
 Discord: Ben_Ghosti (Open for technical exchange and lab discussions)
+
+##icense
+
+© 2026 BenGhosti. All rights reserved.
