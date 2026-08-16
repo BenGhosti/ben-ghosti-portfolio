@@ -5,6 +5,7 @@
   const navBar = doc.querySelector('[data-nav]');
   const navToggle = doc.querySelector('[data-nav-toggle]');
   const navMenu = doc.getElementById('primary-nav');
+  const navScrim = doc.querySelector('[data-nav-scrim]');
 
   const onScroll = () => {
     if (!navBar) return;
@@ -17,6 +18,11 @@
     const closeMenu = () => {
       navToggle.classList.remove('is-active');
       navMenu.classList.remove('is-open');
+      if (navBar) navBar.classList.remove('nav-open');
+      if (navScrim) {
+        navScrim.classList.remove('is-visible');
+        navScrim.setAttribute('aria-hidden', 'true');
+      }
       navToggle.setAttribute('aria-expanded', 'false');
       root.style.overflow = '';
     };
@@ -24,9 +30,18 @@
     navToggle.addEventListener('click', () => {
       const open = navToggle.classList.toggle('is-active');
       navMenu.classList.toggle('is-open', open);
+      if (navBar) navBar.classList.toggle('nav-open', open);
+      if (navScrim) {
+        navScrim.classList.toggle('is-visible', open);
+        navScrim.setAttribute('aria-hidden', String(!open));
+      }
       navToggle.setAttribute('aria-expanded', String(open));
       root.style.overflow = open ? 'hidden' : '';
     });
+
+    if (navScrim) {
+      navScrim.addEventListener('click', closeMenu);
+    }
 
     navMenu.querySelectorAll('a').forEach((link) => {
       link.addEventListener('click', closeMenu);
