@@ -27,7 +27,6 @@ This repository contains the complete source code for [ben-ghosti.de](https://be
 | :--- | :--- | :--- | :--- |
 | **🌐 Central Hub** | `/index.html` | Core landing page displaying skills, custom workstation builds, and link matrix. | Live |
 | **🎓 School Stuff** | `/school/` | Integrated document management, custom stylesheets, and structured digital school notes. | New |
-| **🎨 Benpixel Space** | `/benpixel/` | Dedicated creative project directory containing standalone asset logic. | New |
 | **🤝 Sponsors** | `/sponsors.html` | Overview of hardware suppliers, software partners, and infrastructure supporters. | Live |
 | **📈 System Status** | `/status.html` | Real-time health monitoring of local storage layers and self-hosted environments. | Live |
 
@@ -52,9 +51,6 @@ The integrated system status dashboard aggregates availability data directly fro
 │   ├── fonts/              # Locally hosted performance-optimized webfonts
 │   ├── images/             # Compressed image assets (Glacier Workstation, server racks)
 │   └── js/                 # Pure Vanilla JavaScript framework (main.js)
-├── benpixel/               # Sub-Directory: Dedicated creative node
-│   ├── assets/             # Independent assets for the Benpixel subsystem
-│   └── benpixel.html       # Creative space entry point
 ├── school/                 # Sub-Directory: Academic document repository
 │   ├── style.css           # Custom school layout styling
 │   └── math.html           # Embedded math & documentation stack

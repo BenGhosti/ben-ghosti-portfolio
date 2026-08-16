@@ -144,14 +144,12 @@ function renderQuestion() {
 
   // ── Text Input ──
   if (question.type === 'text-input') {
-    const savedVal = question.userAnswer || '';
     html += `
       <input
         type="text"
         class="quiz-input"
         id="text-input"
         placeholder="Deine Antwort eingeben …"
-        value="${savedVal}"
         ${answered ? 'disabled' : ''}
       />
     `;
@@ -192,6 +190,7 @@ function renderQuestion() {
   if (question.type === 'text-input') {
     const input = quizInner.querySelector('#text-input');
     if (input) {
+      input.value = question.userAnswer || '';
       input.addEventListener('input', () => { question.userAnswer = input.value; });
     }
   }
