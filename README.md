@@ -61,14 +61,17 @@ The integrated system status dashboard aggregates availability data directly fro
 
 
 ```
+---
 
-##📡 Signal & Exchange
+## 📡 Signal & Exchange
 
 Web: ben-ghosti.de
 Mail: info@ben-ghosti.de
 Instagram: @ben_ghosti
 Discord: Ben_Ghosti (Open for technical exchange and lab discussions)
 
-##icense
+---
+
+## ⚖️License
 
 © 2026 BenGhosti. All rights reserved.
