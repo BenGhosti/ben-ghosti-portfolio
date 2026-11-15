@@ -266,7 +266,7 @@
 
     setText(els.seasonTitle, title);
     setText(els.seasonDescription, season.description || FALLBACK_DESCRIPTION);
-    setText(els.heroSeason, number !== null ? String(number) : '—');
+    setText(els.heroSeason, number !== null ? String(number) : '');
 
     const start = parseDate(season.start);
     const end = parseDate(season.end);

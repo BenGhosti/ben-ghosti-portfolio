@@ -23,6 +23,42 @@
   left: var(--gutter);
   right: var(--gutter);
   justify-content: space-between;
+  align-items: baseline;
+  height: auto;
+  line-height: 20px;
+}
+
+.bp-hero-meta-top > span {
+  display: inline-block;
+  line-height: 20px;
+}
+
+#hero-season:empty {
+  display: none;
+}
+
+.bp-hero .hero-scroll {
+  bottom: 24px;
+  gap: 8px;
+}
+
+.bp-hero .scroll-track {
+  height: 28px;
+}
+
+.bp-hero .scroll-thumb {
+  height: 12px;
+  top: -12px;
+  animation: bpScrollFlow 2.2s var(--ease-premium) infinite;
+}
+
+.bp-hero .scroll-label {
+  font-size: 10px;
+}
+
+@keyframes bpScrollFlow {
+  0% { top: -12px; }
+  100% { top: 28px; }
 }
 
 .bp-hero-image {
@@ -1163,14 +1199,6 @@ body.bp-modal-open {
 
   .bp-hero-mark {
     display: none;
-  }
-
-  .hero-scroll {
-    left: auto;
-    right: var(--gutter);
-    transform: none;
-    align-items: center;
-    bottom: 92px;
   }
 }
 
