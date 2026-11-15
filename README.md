@@ -85,6 +85,7 @@ The season number is cached in the browser, so it stays visible when the server 
 * `start`, `end` — the season window. If the server is offline inside this window, the page shows **Currently offline**; outside it shows **Off-Season**. Dates use `YYYY-MM-DD`.
 * `nextStart` — used for the off-season countdown.
 * `description`, `highlights`, `archive` — visible content.
+* `discord` — Discord invite URL for the Join button. Leave empty to link to the contact hub.
 * `whitelist` — controls the whitelist form.
 
 The page reads the Minecraft status live from `benpixel.ben-ghosti.de` via `api.mcsrvstat.us` (with `api.mcstatus.io` as fallback).

@@ -53,7 +53,6 @@
 <a class="nav-link" href="#season">Season</a>
 <a class="nav-link" href="#join">Join</a>
 <a class="nav-link" href="#whitelist">Whitelist</a>
-<a class="nav-link" href="#cycle">Cycle</a>
 <a class="nav-link" href="../index.html">Portfolio</a>
 </nav>
 <button aria-controls="primary-nav" aria-expanded="false" aria-label="Toggle navigation" class="nav-toggle" data-nav-toggle="" type="button">
@@ -73,10 +72,8 @@
 <div class="hero-vignette"></div>
 <div aria-hidden="true" class="bp-hero-grid"></div>
 </div>
-<div class="hero-meta hero-meta-top-left">
+<div class="hero-meta bp-hero-meta-top">
 <span>Season <span id="hero-season">—</span></span>
-</div>
-<div class="hero-meta hero-meta-top-right">
 <span>Germany</span>
 </div>
 <div class="hero-content">
@@ -190,13 +187,15 @@
 <header class="section-header">
 <p class="section-index">03 / How to Join</p>
 <h2 class="section-title">Connect in a minute.</h2>
-<p class="section-lead">Java Edition. Read the server rules, agree to them, then add the address to your server list. When the season is live, the server is open.</p>
+<p class="section-lead">Java Edition. Read the rules, agree, then copy the address or join the Discord.</p>
 </header>
 
-<div class="bp-join-grid">
-<article class="card-2 bp-address-card" id="address-card">
+<article class="card-2 bp-join-card" id="address-card">
+<div class="bp-join-head">
+<div class="bp-join-address-wrap">
 <span class="bp-meta-label">Server address</span>
-<p aria-describedby="address-note" class="bp-address is-locked" id="join-address">benpixel.ben-ghosti.de</p>
+<p aria-describedby="agree-note" class="bp-address is-locked" id="join-address">benpixel.ben-ghosti.de</p>
+</div>
 <button class="bp-copy-btn" disabled id="copy-address" type="button">
 <svg aria-hidden="true" fill="none" height="15" viewBox="0 0 15 15" width="15">
 <rect height="8" rx="1.5" stroke="currentColor" stroke-width="1.2" width="8" x="4" y="4"/>
@@ -204,31 +203,11 @@
 </svg>
 <span>Copy address</span>
 </button>
-<p class="bp-agree-note" id="address-note">Agree to the server rules to reveal the address.</p>
-</article>
+</div>
 
-<article class="card-2">
-<span class="bp-meta-label">Requirements</span>
-<h3 class="card-title">Java Edition</h3>
-<p class="card-body">The server runs on Java Edition. The exact version is detected live: <strong id="join-version">—</strong>.</p>
-<ul class="card-tags">
-<li>Java Edition</li>
-<li>No mods required</li>
-<li>Seasonal access</li>
-</ul>
-</article>
+<p class="bp-join-version-line">Java Edition · <strong id="join-version">—</strong></p>
 
-<article class="card-2">
-<span class="bp-meta-label">Community</span>
-<h3 class="card-title">Discord</h3>
-<p class="card-body">Season dates, changelogs, and the next start are announced in Discord. Say hi: <strong>Ben_Ghosti</strong>.</p>
-<a class="bp-inline-link" href="../index.html#links" id="discord-link">Open contact hub <span aria-hidden="true">↗</span></a>
-</article>
-
-<article class="card-2 bp-rules-card">
-<span class="bp-meta-label">Server rules</span>
-<h3 class="card-title">Read before you join.</h3>
-<p class="card-body">The full ruleset is provided as a PDF. You must agree before the server address is revealed.</p>
+<div class="bp-join-rules">
 <div class="bp-rules-actions">
 <button aria-haspopup="dialog" class="bp-copy-btn" id="open-rules" type="button">
 <svg aria-hidden="true" fill="none" height="15" viewBox="0 0 15 15" width="15">
@@ -244,8 +223,16 @@
 <span>I have read and agree to the server rules.</span>
 </label>
 <p class="bp-agree-note" id="agree-note">Agree to reveal the server address.</p>
-</article>
 </div>
+
+<a class="bp-discord-btn" href="../index.html#links" id="discord-link" rel="noopener noreferrer" target="_blank">
+<svg aria-hidden="true" fill="currentColor" height="16" viewBox="0 0 24 24" width="16">
+<path d="M20.3 4.4A19.8 19.8 0 0015.9 3l-.2.4a18.5 18.5 0 00-1.1 2.3 17 17 0 00-5.2 0A18.5 18.5 0 008.3 3.4L7.9 3a19.8 19.8 0 00-4.4 1.4A20.4 20.4 0 00.1 18.1a19.9 19.9 0 006 3l1.3-1.8a12.8 12.8 0 01-2-1c.2-.1.3-.3.5-.4a14.2 14.2 0 0012.2 0l.5.4a12.8 12.8 0 01-2 1l1.3 1.8a19.9 19.9 0 006-3A20.4 20.4 0 0020.3 4.4zM8.5 15.4c-1.2 0-2.1-1.1-2.1-2.4s.9-2.4 2.1-2.4 2.1 1.1 2.1 2.4-.9 2.4-2.1 2.4zm7 0c-1.2 0-2.1-1.1-2.1-2.4s.9-2.4 2.1-2.4 2.1 1.1 2.1 2.4-.9 2.4-2.1 2.4z"/>
+</svg>
+<span id="discord-label">Open contact hub</span>
+<span aria-hidden="true" class="bp-discord-arrow">↗</span>
+</a>
+</article>
 </section>
 
 <section class="section" id="whitelist">
@@ -279,32 +266,6 @@
 <p aria-live="polite" class="bp-whitelist-result" id="whitelist-result" role="status"></p>
 <button class="bp-copy-btn" id="whitelist-submit" type="submit">Send whitelist request</button>
 </form>
-</div>
-</section>
-
-<section class="section" id="cycle">
-<header class="section-header">
-<p class="section-index">05 / Season Cycle</p>
-<h2 class="section-title">Open. Play. Archive.</h2>
-<p class="section-lead">The server is not always online — that is the point. Between seasons this page shows an off-season state instead of a broken connection.</p>
-</header>
-
-<div class="bp-cycle-grid">
-<article class="card-2">
-<span class="card-index">→ 01</span>
-<h3 class="card-title">Season opens</h3>
-<p class="card-body">A fresh world, a new seed, and a clean start. The status above turns green as soon as the server is reachable.</p>
-</article>
-<article class="card-2">
-<span class="card-index">→ 02</span>
-<h3 class="card-title">Season runs</h3>
-<p class="card-body">The world stays online for a limited window. Players, MOTD, version, and availability are read live from the server.</p>
-</article>
-<article class="card-2">
-<span class="card-index">→ 03</span>
-<h3 class="card-title">Season closes</h3>
-<p class="card-body">When the window ends, the server goes offline and the world is archived. This page switches to off-season mode automatically.</p>
-</article>
 </div>
 </section>
 </main>

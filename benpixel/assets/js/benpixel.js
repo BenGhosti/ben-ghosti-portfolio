@@ -86,9 +86,9 @@
     joinAddress: $('#join-address'),
     joinVersion: $('#join-version'),
     discordLink: $('#discord-link'),
+    discordLabel: $('#discord-label'),
     copyButton: $('#copy-address'),
     addressCard: $('#address-card'),
-    addressNote: $('#address-note'),
     agreeCheckbox: $('#agree-rules'),
     agreeNote: $('#agree-note'),
     openRules: $('#open-rules'),
@@ -209,6 +209,7 @@
     renderHighlights(state.season || {});
     renderArchive();
     renderWhitelist();
+    updateJoin();
   }
 
   const VERSION_PATTERN = /(?<![.\d])\bv?(?:ersion\s*)?(\d{1,2}\.\d{1,3}(?:\.\d{1,3})?)(?:\s*[-–—]\s*(\d{1,2}\.\d{1,3}(?:\.\d{1,3})?))?/i;
@@ -612,17 +613,16 @@
 
   function updateJoin() {
     const version = parseVersion(state.server?.motd);
+    const invite = state.season?.discord || CONFIG.discord;
 
     setText(els.heroHost, CONFIG.host);
     setText(els.statusHost, CONFIG.host);
     setText(els.joinAddress, CONFIG.host);
     setText(els.joinVersion, version || '—');
 
-    if (CONFIG.discord && els.discordLink) {
-      els.discordLink.href = CONFIG.discord;
-      els.discordLink.textContent = 'Join the Discord ↗';
-      els.discordLink.target = '_blank';
-      els.discordLink.rel = 'noopener noreferrer';
+    if (els.discordLink) {
+      els.discordLink.href = invite || '../index.html#links';
+      setText(els.discordLabel, invite ? 'Join the Discord' : 'Open contact hub');
     }
   }
 
@@ -729,13 +729,6 @@
     if (els.joinAddress) els.joinAddress.classList.toggle('is-locked', !agreed);
     if (els.copyButton) els.copyButton.disabled = !agreed;
     if (els.addressCard) els.addressCard.classList.toggle('is-unlocked', agreed);
-
-    setText(
-      els.addressNote,
-      agreed
-        ? 'Rules accepted. The address is ready to copy.'
-        : 'Agree to the server rules to reveal the address.'
-    );
 
     setText(
       els.agreeNote,

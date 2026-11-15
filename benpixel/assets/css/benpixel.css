@@ -18,6 +18,13 @@
   isolation: isolate;
 }
 
+.bp-hero-meta-top {
+  top: 72px;
+  left: var(--gutter);
+  right: var(--gutter);
+  justify-content: space-between;
+}
+
 .bp-hero-image {
   position: absolute;
   inset: 0;
@@ -572,16 +579,34 @@
 
 /* ── Join ──────────────────────────────────────────────────── */
 
-.bp-join-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: clamp(16px, 2vw, 24px);
-}
-
-.bp-address-card {
+.bp-join-card {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  gap: 20px;
+}
+
+.bp-join-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.bp-join-address-wrap {
+  min-width: 0;
+}
+
+.bp-join-version-line {
+  margin: 0;
+  font-size: 13px;
+  color: var(--ink-2);
+  letter-spacing: 0.02em;
+}
+
+.bp-join-rules {
+  padding-top: 22px;
+  border-top: 1px solid var(--line);
 }
 
 .bp-address {
@@ -591,6 +616,10 @@
   line-height: 1.2;
   color: var(--ink-0);
   overflow-wrap: anywhere;
+}
+
+.bp-join-card .bp-address {
+  margin-bottom: 0;
 }
 
 .bp-copy-btn {
@@ -626,6 +655,39 @@
 }
 
 .bp-inline-link:hover {
+  color: var(--ink-0);
+}
+
+.bp-discord-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  align-self: flex-start;
+  padding: 12px 20px;
+  border: 1px solid rgba(88, 101, 242, 0.45);
+  border-radius: 999px;
+  background: rgba(88, 101, 242, 0.1);
+  color: var(--ink-0);
+  font-size: 14px;
+  transition:
+    border-color 300ms var(--ease-premium),
+    background-color 300ms var(--ease-premium),
+    transform 300ms var(--ease-premium);
+}
+
+.bp-discord-btn:hover {
+  border-color: rgba(88, 101, 242, 0.8);
+  background: rgba(88, 101, 242, 0.18);
+  transform: translateY(-1px);
+}
+
+.bp-discord-arrow {
+  color: var(--ink-2);
+  transition: transform 300ms var(--ease-premium), color 300ms var(--ease-premium);
+}
+
+.bp-discord-btn:hover .bp-discord-arrow {
+  transform: translate(2px, -2px);
   color: var(--ink-0);
 }
 
@@ -670,7 +732,7 @@
   pointer-events: none;
 }
 
-.bp-address-card.is-unlocked {
+.bp-join-card.is-unlocked {
   border-color: rgba(0, 242, 254, 0.22);
 }
 
@@ -798,29 +860,6 @@
 .bp-whitelist-form .bp-copy-btn {
   grid-column: 1 / -1;
   justify-self: start;
-}
-
-/* ── Season cycle ──────────────────────────────────────────── */
-
-.bp-cycle-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: clamp(16px, 2vw, 24px);
-}
-
-.bp-cycle-grid .card-2 {
-  display: flex;
-  flex-direction: column;
-}
-
-.bp-cycle-grid .card-title {
-  margin: 10px 0 12px;
-  font-size: clamp(20px, 2vw, 26px);
-}
-
-.bp-cycle-grid .card-body {
-  margin-bottom: 0;
-  font-size: 14px;
 }
 
 /* ── Footer / toast ────────────────────────────────────────── */
@@ -1029,6 +1068,10 @@ body.bp-modal-open {
     padding-bottom: 96px;
   }
 
+  .bp-hero-meta-top {
+    display: none;
+  }
+
   .bp-hero-mark {
     width: 78px;
     margin-bottom: 14px;
@@ -1061,16 +1104,24 @@ body.bp-modal-open {
     grid-template-columns: 1fr;
   }
 
-  .bp-join-grid,
-  .bp-highlights,
-  .bp-cycle-grid {
+  .bp-highlights {
     grid-template-columns: 1fr;
+  }
+
+  .bp-join-head {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .bp-discord-btn {
+    align-self: stretch;
+    justify-content: center;
   }
 
   .bp-whitelist-form {
     grid-template-columns: 1fr;
   }
-
   .bp-countdown {
     gap: 6px;
   }
@@ -1101,6 +1152,25 @@ body.bp-modal-open {
   .bp-modal-head,
   .bp-modal-foot {
     padding: 14px 16px;
+  }
+}
+
+@media (min-width: 721px) and (max-height: 700px) {
+  .bp-hero {
+    padding-top: 90px;
+    padding-bottom: 72px;
+  }
+
+  .bp-hero-mark {
+    display: none;
+  }
+
+  .hero-scroll {
+    left: auto;
+    right: var(--gutter);
+    transform: none;
+    align-items: center;
+    bottom: 92px;
   }
 }
 
