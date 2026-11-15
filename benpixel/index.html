@@ -52,6 +52,7 @@
 <a class="nav-link" href="#status">Status</a>
 <a class="nav-link" href="#season">Season</a>
 <a class="nav-link" href="#join">Join</a>
+<a class="nav-link" href="#whitelist">Whitelist</a>
 <a class="nav-link" href="#cycle">Cycle</a>
 <a class="nav-link" href="../index.html">Portfolio</a>
 </nav>
@@ -248,9 +249,43 @@
 </div>
 </section>
 
+<section class="section" id="whitelist">
+<header class="section-header">
+<p class="section-index">04 / Whitelist</p>
+<h2 class="section-title">Request access.</h2>
+<p class="section-lead">Whitelist requests are reviewed before the next season. Read the rules, agree to them, and send your Minecraft username.</p>
+</header>
+
+<div class="card-2 bp-whitelist-card">
+<div class="bp-whitelist-status">
+<span class="bp-pill" data-state="offline" id="whitelist-state">Closed</span>
+<p class="bp-whitelist-message" id="whitelist-message">Whitelist requests open with the next season.</p>
+</div>
+
+<form class="bp-whitelist-form" hidden id="whitelist-form" novalidate>
+<div class="bp-field">
+<label for="whitelist-username">Minecraft username</label>
+<input autocomplete="username" id="whitelist-username" maxlength="16" minlength="3" name="username" pattern="[A-Za-z0-9_]{3,16}" placeholder="YourJavaName" required type="text"/>
+</div>
+<div class="bp-field">
+<label for="whitelist-discord">Discord handle <span>optional</span></label>
+<input autocomplete="off" id="whitelist-discord" maxlength="40" name="discord" placeholder="Ben_Ghosti" type="text"/>
+</div>
+<div aria-hidden="true" class="bp-honeypot">
+<label for="whitelist-website">Website</label>
+<input autocomplete="off" id="whitelist-website" name="website" tabindex="-1" type="text"/>
+</div>
+<div class="bp-turnstile" id="whitelist-turnstile"></div>
+<p class="bp-whitelist-hint" id="whitelist-hint">You need to agree to the server rules above before sending a request.</p>
+<p aria-live="polite" class="bp-whitelist-result" id="whitelist-result" role="status"></p>
+<button class="bp-copy-btn" id="whitelist-submit" type="submit">Send whitelist request</button>
+</form>
+</div>
+</section>
+
 <section class="section" id="cycle">
 <header class="section-header">
-<p class="section-index">04 / Season Cycle</p>
+<p class="section-index">05 / Season Cycle</p>
 <h2 class="section-title">Open. Play. Archive.</h2>
 <p class="section-lead">The server is not always online — that is the point. Between seasons this page shows an off-season state instead of a broken connection.</p>
 </header>

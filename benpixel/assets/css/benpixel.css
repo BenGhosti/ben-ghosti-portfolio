@@ -673,6 +673,120 @@
   background: rgba(255, 255, 255, 0.02);
 }
 
+/* ── Whitelist ─────────────────────────────────────────────── */
+
+.bp-whitelist-card {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.bp-whitelist-status {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.bp-whitelist-status .bp-pill {
+  flex: 0 0 auto;
+}
+
+.bp-whitelist-message {
+  margin: 0;
+  padding-top: 4px;
+  font-size: 14px;
+  color: var(--ink-1);
+}
+
+.bp-whitelist-form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+  padding-top: 22px;
+  border-top: 1px solid var(--line);
+}
+
+.bp-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.bp-field label {
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+.bp-field label span {
+  letter-spacing: 0.04em;
+  text-transform: none;
+  color: var(--ink-3);
+}
+
+.bp-field input {
+  width: 100%;
+  padding: 13px 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-m);
+  background: rgba(255, 255, 255, 0.02);
+  color: var(--ink-0);
+  font-family: inherit;
+  font-size: 15px;
+  transition: border-color 300ms var(--ease-premium), background-color 300ms var(--ease-premium);
+}
+
+.bp-field input:hover {
+  border-color: var(--line-strong);
+}
+
+.bp-field input:focus {
+  border-color: var(--accent-cyan);
+  background: rgba(0, 242, 254, 0.04);
+}
+
+.bp-honeypot {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.bp-turnstile {
+  grid-column: 1 / -1;
+  min-height: 0;
+}
+
+.bp-whitelist-hint {
+  grid-column: 1 / -1;
+  margin: 0;
+  font-size: 12px;
+  color: var(--ink-3);
+}
+
+.bp-whitelist-result {
+  grid-column: 1 / -1;
+  margin: 0;
+  font-size: 13px;
+  color: var(--ink-2);
+}
+
+.bp-whitelist-result[data-state="success"] {
+  color: #7ff0a8;
+}
+
+.bp-whitelist-result[data-state="error"] {
+  color: #ff9d9d;
+}
+
+.bp-whitelist-form .bp-copy-btn {
+  grid-column: 1 / -1;
+  justify-self: start;
+}
+
 /* ── Season cycle ──────────────────────────────────────────── */
 
 .bp-cycle-grid {
@@ -937,6 +1051,10 @@ body.bp-modal-open {
   .bp-join-grid,
   .bp-highlights,
   .bp-cycle-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .bp-whitelist-form {
     grid-template-columns: 1fr;
   }
 

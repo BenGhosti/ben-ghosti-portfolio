@@ -22,5 +22,9 @@
       "body": "Season worlds are archived when they close, so nothing is lost."
     }
   ],
-  "archive": []
+  "archive": [],
+  "whitelist": {
+    "open": false,
+    "message": "Whitelist requests open with the next season."
+  }
 }

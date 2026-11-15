@@ -13,7 +13,11 @@
     seasonFile: 'season.json',
     refreshMs: 60000,
     timeoutMs: 8000,
-    discord: ''
+    discord: '',
+    whitelist: {
+      endpoint: '',
+      turnstileSiteKey: ''
+    }
   };
 
   const RULES = {
@@ -38,7 +42,11 @@
     lastRefreshAt: 0,
     lastMotd: null,
     agreed: false,
-    lastFocused: null
+    lastFocused: null,
+    whitelistToken: '',
+    whitelistLoading: false,
+    turnstileWidgetId: null,
+    turnstileScriptRequested: false
   };
 
   const $ = (selector, root = document) => root.querySelector(selector);
@@ -87,6 +95,16 @@
     closeRules: $('#close-rules'),
     rulesFrame: $('#rules-frame'),
     modalAgree: $('#modal-agree'),
+    whitelistForm: $('#whitelist-form'),
+    whitelistState: $('#whitelist-state'),
+    whitelistMessage: $('#whitelist-message'),
+    whitelistUsername: $('#whitelist-username'),
+    whitelistDiscord: $('#whitelist-discord'),
+    whitelistWebsite: $('#whitelist-website'),
+    whitelistTurnstile: $('#whitelist-turnstile'),
+    whitelistHint: $('#whitelist-hint'),
+    whitelistResult: $('#whitelist-result'),
+    whitelistSubmit: $('#whitelist-submit'),
     toast: $('#bp-toast'),
     toastText: $('#bp-toast-text')
   };
@@ -179,6 +197,7 @@
     renderSeason();
     renderHighlights(state.season || {});
     renderArchive();
+    renderWhitelist();
   }
 
   function parseSeasonNumber(motd) {
@@ -669,6 +688,8 @@
         ? 'Rules accepted for this rules version.'
         : 'Agree to reveal the server address.'
     );
+
+    updateWhitelistSubmit();
   }
 
   function isRulesModalOpen() {
@@ -734,6 +755,175 @@
     trapRulesFocus(event);
   }
 
+  /* ── Whitelist request ────────────────────────────────────── */
+
+  function renderWhitelist() {
+    const config = state.season?.whitelist || {};
+    const open = config.open === true;
+    const endpoint = CONFIG.whitelist.endpoint;
+    const siteKey = CONFIG.whitelist.turnstileSiteKey;
+    const ready = open && Boolean(endpoint) && Boolean(siteKey);
+
+    if (els.whitelistState) {
+      els.whitelistState.textContent = ready ? 'Open' : 'Closed';
+      setState(els.whitelistState, ready ? 'live' : 'offline');
+    }
+
+    let message = config.message || (ready
+      ? 'Whitelist requests are open. Read the rules above, then send your Minecraft username.'
+      : 'Whitelist requests open with the next season.');
+
+    if (open && !endpoint) {
+      message = 'Whitelist is enabled, but the request endpoint is not configured yet.';
+    } else if (open && !siteKey) {
+      message = 'Whitelist is enabled, but the captcha is not configured yet.';
+    }
+
+    setText(els.whitelistMessage, message);
+
+    if (els.whitelistForm) {
+      els.whitelistForm.hidden = !ready;
+    }
+
+    if (ready) {
+      loadTurnstile();
+    }
+
+    updateWhitelistSubmit();
+  }
+
+  function loadTurnstile() {
+    if (!CONFIG.whitelist.turnstileSiteKey || !els.whitelistTurnstile) return;
+
+    if (window.turnstile) {
+      renderTurnstileWidget();
+      return;
+    }
+
+    if (state.turnstileScriptRequested) return;
+    state.turnstileScriptRequested = true;
+
+    const script = document.createElement('script');
+    script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
+    script.async = true;
+    script.defer = true;
+    script.onload = renderTurnstileWidget;
+    script.onerror = () => {
+      showWhitelistResult('Could not load the captcha. Please try again later.', 'error');
+    };
+
+    document.head.appendChild(script);
+  }
+
+  function renderTurnstileWidget() {
+    if (!window.turnstile || !els.whitelistTurnstile || state.turnstileWidgetId !== null) return;
+
+    state.turnstileWidgetId = window.turnstile.render(els.whitelistTurnstile, {
+      sitekey: CONFIG.whitelist.turnstileSiteKey,
+      theme: 'dark',
+      callback: (token) => {
+        state.whitelistToken = token;
+        updateWhitelistSubmit();
+      },
+      'expired-callback': () => {
+        state.whitelistToken = '';
+        updateWhitelistSubmit();
+      },
+      'error-callback': () => {
+        state.whitelistToken = '';
+        updateWhitelistSubmit();
+      }
+    });
+  }
+
+  function updateWhitelistSubmit() {
+    if (els.whitelistSubmit) {
+      els.whitelistSubmit.disabled = !state.agreed || !state.whitelistToken || state.whitelistLoading;
+    }
+
+    setText(
+      els.whitelistHint,
+      state.agreed
+        ? 'Rules accepted. Complete the captcha and send your request.'
+        : 'You need to agree to the server rules above before sending a request.'
+    );
+  }
+
+  function showWhitelistResult(message, stateName) {
+    if (!els.whitelistResult) return;
+
+    els.whitelistResult.textContent = message || '';
+
+    if (stateName) {
+      els.whitelistResult.dataset.state = stateName;
+    } else {
+      delete els.whitelistResult.dataset.state;
+    }
+  }
+
+  async function handleWhitelistSubmit(event) {
+    event.preventDefault();
+
+    const username = els.whitelistUsername?.value.trim() || '';
+    const discord = els.whitelistDiscord?.value.trim() || '';
+    const honeypot = els.whitelistWebsite?.value.trim() || '';
+
+    if (honeypot) return;
+    if (!state.agreed) {
+      showWhitelistResult('Please agree to the server rules above first.', 'error');
+      return;
+    }
+    if (!/^[A-Za-z0-9_]{3,16}$/.test(username)) {
+      showWhitelistResult('Please enter a valid Minecraft Java username (3-16 letters, numbers, or underscores).', 'error');
+      return;
+    }
+    if (!CONFIG.whitelist.endpoint) {
+      showWhitelistResult('Whitelist requests are not connected yet.', 'error');
+      return;
+    }
+    if (!state.whitelistToken) {
+      showWhitelistResult('Please complete the captcha first.', 'error');
+      return;
+    }
+
+    state.whitelistLoading = true;
+    updateWhitelistSubmit();
+    showWhitelistResult('Sending request…');
+
+    try {
+      const response = await fetch(CONFIG.whitelist.endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          username,
+          discord,
+          rulesVersion: RULES.version,
+          turnstileToken: state.whitelistToken
+        })
+      });
+
+      const data = await response.json().catch(() => ({}));
+
+      if (!response.ok || data.ok === false) {
+        throw new Error(data.message || `Request failed (HTTP ${response.status}).`);
+      }
+
+      showWhitelistResult(data.message || 'Request received. You will be contacted in Discord.', 'success');
+
+      if (els.whitelistForm) els.whitelistForm.reset();
+      state.whitelistToken = '';
+
+      if (window.turnstile && state.turnstileWidgetId !== null) {
+        window.turnstile.reset(state.turnstileWidgetId);
+      }
+    } catch (error) {
+      showWhitelistResult(error.message || 'Could not send the request. Please try again later.', 'error');
+    } finally {
+      state.whitelistLoading = false;
+      updateWhitelistSubmit();
+    }
+  }
+
   /* ── Init ──────────────────────────────────────────────────── */
 
   function init() {
@@ -773,6 +963,10 @@
         setAgreed(true);
         closeRulesModal();
       });
+    }
+
+    if (els.whitelistForm) {
+      els.whitelistForm.addEventListener('submit', handleWhitelistSubmit);
     }
 
     document.addEventListener('keydown', handleRulesKeydown);

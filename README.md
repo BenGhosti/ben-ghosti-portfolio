@@ -87,6 +87,13 @@ The page reads the Minecraft status live from `benpixel.ben-ghosti.de` via `api.
 * The agreement is stored in the browser (`localStorage`) and tied to the rules version.
 * When the PDF changes, bump `RULES.version` in [`benpixel/assets/js/benpixel.js`](benpixel/assets/js/benpixel.js) so returning visitors have to agree again.
 
+### Benpixel whitelist
+
+* Requests are controlled by [`benpixel/season.json`](benpixel/season.json): set `whitelist.open` to `true` and adjust `whitelist.message`.
+* The form appears only when the flag is open **and** both `CONFIG.whitelist.endpoint` and `CONFIG.whitelist.turnstileSiteKey` are configured in `benpixel/assets/js/benpixel.js`.
+* The frontend posts `{ username, discord, rulesVersion, turnstileToken }` to the configured endpoint.
+* The planned backend is a Cloudflare Worker that verifies Turnstile, resolves the Mojang UUID, logs IP/User-Agent for abuse prevention, stores the request, and forwards it to Discord. The Worker is intentionally not included yet; the approval flow and retention policy are still open.
+
 ---
 
 ## 📡 Signal & Exchange
