@@ -25,6 +25,8 @@
     storageKey: 'benpixel.rules.agreement'
   };
 
+  const SEASON_CACHE_KEY = 'benpixel.lastSeason';
+
   const FALLBACK_DESCRIPTION = 'Benpixel runs in seasons. Each season opens a fresh world for a limited time, then closes and is archived before the next one begins.';
 
   const FALLBACK_HIGHLIGHTS = [
@@ -64,7 +66,6 @@
     playersMax: $('#players-max'),
     motd: $('#server-motd'),
     version: $('#server-version'),
-    software: $('#server-software'),
     updated: $('#status-updated'),
     statusNote: $('#status-note'),
     seasonKicker: $('#season-kicker'),
@@ -141,8 +142,18 @@
 
   function parseDate(value) {
     if (!value) return null;
+
+    const dateOnly = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(value));
+    if (dateOnly) {
+      return new Date(Number(dateOnly[1]), Number(dateOnly[2]) - 1, Number(dateOnly[3]));
+    }
+
     const date = new Date(value);
     return Number.isNaN(date.getTime()) ? null : date;
+  }
+
+  function endExclusiveDate(date) {
+    return date ? new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1) : null;
   }
 
   function formatDate(date) {
@@ -200,30 +211,61 @@
     renderWhitelist();
   }
 
+  const VERSION_PATTERN = /(?<![.\d])\bv?(?:ersion\s*)?(\d{1,2}\.\d{1,3}(?:\.\d{1,3})?)(?:\s*[-–—]\s*(\d{1,2}\.\d{1,3}(?:\.\d{1,3})?))?/i;
+
   function parseSeasonNumber(motd) {
     const match = /season\s*#?\s*(\d{1,3})/i.exec(String(motd || ''));
     return match ? Number(match[1]) : null;
   }
 
-  function parseSeasonName(motd) {
-    const match = /season\s*#?\s*\d{1,3}\s*[-–—:|]\s*([^\n]{2,48})/i.exec(String(motd || ''));
-    return match ? match[1].trim() : '';
+  function parseVersion(motd) {
+    const text = String(motd || '');
+    const matches = Array.from(text.matchAll(new RegExp(VERSION_PATTERN.source, 'gi')));
+    if (!matches.length) return '';
+
+    const chosen = matches.find((match) => match[2]) || matches[0];
+    return chosen[2] ? `${chosen[1]} – ${chosen[2]}` : chosen[1];
+  }
+
+  function readCachedSeason() {
+    try {
+      const raw = window.localStorage.getItem(SEASON_CACHE_KEY);
+      if (!raw) return null;
+      const stored = JSON.parse(raw);
+      return Number.isInteger(stored?.number) ? stored.number : null;
+    } catch (error) {
+      return null;
+    }
+  }
+
+  function writeCachedSeason(number) {
+    if (!Number.isInteger(number)) return;
+
+    try {
+      window.localStorage.setItem(SEASON_CACHE_KEY, JSON.stringify({
+        number,
+        updatedAt: new Date().toISOString()
+      }));
+    } catch (error) {
+      /* Storage can be unavailable; the live MOTD still works. */
+    }
   }
 
   function renderSeason() {
     const season = state.season || {};
     const motd = state.server?.motd || '';
-    const number = season.number ?? parseSeasonNumber(motd);
-    const name = season.name || parseSeasonName(motd);
+    const liveNumber = parseSeasonNumber(motd);
 
-    let title = 'Season details';
-    if (number && name) title = `Season ${number} · ${name}`;
-    else if (number) title = `Season ${number}`;
-    else if (name) title = name;
+    if (liveNumber !== null && readCachedSeason() !== liveNumber) {
+      writeCachedSeason(liveNumber);
+    }
+
+    const number = liveNumber !== null ? liveNumber : readCachedSeason();
+    const title = number !== null ? `Season ${number}` : 'Season details';
 
     setText(els.seasonTitle, title);
     setText(els.seasonDescription, season.description || FALLBACK_DESCRIPTION);
-    setText(els.heroSeason, number || '—');
+    setText(els.heroSeason, number !== null ? String(number) : '—');
 
     const start = parseDate(season.start);
     const end = parseDate(season.end);
@@ -251,6 +293,7 @@
       checking: { label: 'Checking…', state: 'checking', kicker: 'Current season' },
       live: { label: 'Live', state: 'live', kicker: 'Now playing' },
       offline: { label: 'Off-season', state: 'offline', kicker: 'Between seasons' },
+      outage: { label: 'Currently offline', state: 'outage', kicker: 'Season active' },
       maintenance: { label: 'Maintenance', state: 'maintenance', kicker: 'Season paused' },
       error: { label: 'Unknown', state: 'error', kicker: 'Current season' }
     };
@@ -319,10 +362,10 @@
   function countdownTarget() {
     const season = state.season || {};
     const now = Date.now();
-    const end = parseDate(season.end);
+    const end = endExclusiveDate(parseDate(season.end));
     const next = parseDate(season.nextStart);
 
-    if (state.phase === 'live' && end && end.getTime() > now) {
+    if ((state.phase === 'live' || state.phase === 'outage') && end && end.getTime() > now) {
       return { date: end, label: 'Time until the season closes.' };
     }
     if (next && next.getTime() > now) {
@@ -334,6 +377,7 @@
   function seasonNoteText() {
     if (state.phase === 'live') return 'The season is live. Dates are published on Discord.';
     if (state.phase === 'offline') return 'Off-season. The next start is announced on Discord.';
+    if (state.phase === 'outage') return 'The season is active, but the server is offline.';
     if (state.phase === 'maintenance') return 'Season paused while the server is maintained.';
     return 'Season dates are published on Discord before each start.';
   }
@@ -410,8 +454,6 @@
         online: Number(players.online) || 0,
         max: Number(players.max) || 0
       } : null,
-      version: typeof data?.version === 'string' ? data.version : (data?.version?.name || ''),
-      software: typeof data?.software === 'string' ? data.software : '',
       motd: motdToText(data?.motd)
     };
   }
@@ -425,8 +467,6 @@
         online: Number(players.online) || 0,
         max: Number(players.max) || 0
       } : null,
-      version: data?.version?.name || '',
-      software: data?.software || '',
       motd: motdToText(data?.motd)
     };
   }
@@ -447,9 +487,21 @@
   }
 
   function isMaintenanceMotd(motd) {
-    const text = String(motd || '').toLowerCase();
-    return ['maintenance', 'wartung', 'updating', 'under construction', 'restarting']
-      .some((word) => text.includes(word));
+    return /maint/i.test(String(motd || ''));
+  }
+
+  function isInSeason() {
+    const season = state.season || {};
+    const start = parseDate(season.start);
+    const end = endExclusiveDate(parseDate(season.end));
+    const now = Date.now();
+
+    if (start && end) {
+      return now >= start.getTime() && now < end.getTime();
+    }
+    if (start) return now >= start.getTime();
+    if (end) return now < end.getTime();
+    return false;
   }
 
   function resolvePhase(server) {
@@ -459,18 +511,18 @@
     if (configured === 'offline') return 'offline';
     if (server.error) return 'error';
     if (server.online) return isMaintenanceMotd(server.motd) ? 'maintenance' : 'live';
-    return 'offline';
+    return isInSeason() ? 'outage' : 'offline';
   }
 
   function offlineNote() {
     const season = state.season || {};
     const next = parseDate(season.nextStart);
-    const end = parseDate(season.end);
+    const end = endExclusiveDate(parseDate(season.end));
 
     if (next && next.getTime() > Date.now()) {
       return `Off-season. The next season starts on ${formatDate(next)}.`;
     }
-    if (end && end.getTime() < Date.now()) {
+    if (end && end.getTime() <= Date.now()) {
       return 'The season has ended. The next start is announced on Discord.';
     }
     return 'Benpixel is not online right now. The next season is announced on Discord.';
@@ -523,6 +575,12 @@
         note: offlineNote(),
         motd: 'Benpixel is currently between seasons. The next start is announced on Discord.'
       },
+      outage: {
+        state: 'Currently offline',
+        hero: 'Currently offline',
+        note: 'The season is active, but the server is not reachable. Retrying automatically.',
+        motd: 'The server is currently offline. This page will retry automatically.'
+      },
       maintenance: {
         state: 'Maintenance in progress',
         hero: 'Maintenance',
@@ -538,6 +596,7 @@
     };
 
     const current = messages[phase] || messages.checking;
+    const motdVersion = parseVersion(server.motd);
 
     setText(els.statusState, current.state);
     setText(els.heroStatus, current.hero);
@@ -546,22 +605,18 @@
 
     setText(els.playersOnline, players ? String(players.online) : '—');
     setText(els.playersMax, players ? String(players.max) : '—');
-    setText(els.version, server.online && server.version ? server.version : '—');
-    setText(els.software, server.online && server.software ? server.software : '—');
+    setText(els.version, motdVersion || '—');
     setText(els.updated, phase === 'checking' ? '—' : formatTime(new Date()));
-    setText(els.heroVersion, server.online && server.version ? server.version : 'Java Edition');
+    setText(els.heroVersion, motdVersion ? `Java ${motdVersion}` : 'Java Edition');
   }
 
   function updateJoin() {
-    const server = state.server || {};
+    const version = parseVersion(state.server?.motd);
 
     setText(els.heroHost, CONFIG.host);
     setText(els.statusHost, CONFIG.host);
     setText(els.joinAddress, CONFIG.host);
-    setText(
-      els.joinVersion,
-      server.online && server.version ? server.version : 'detected when online'
-    );
+    setText(els.joinVersion, version || '—');
 
     if (CONFIG.discord && els.discordLink) {
       els.discordLink.href = CONFIG.discord;

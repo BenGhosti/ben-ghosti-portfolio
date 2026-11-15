@@ -1,8 +1,6 @@
 {
-  "_comment": "Season metadata for /benpixel/. Edit this file when a season starts or ends. Dates use ISO format (YYYY-MM-DD). Leave fields empty if unknown; the page falls back to live server data. state: auto follows the live server, offline forces the off-season view, maintenance forces the maintenance view.",
+  "_comment": "Season metadata for /benpixel/. The season number and Minecraft version are read from the server MOTD; maintenance is detected from the MOTD. start/end define the season window and decide whether an offline server shows 'Currently offline' (inside the window) or 'Off-Season' (outside it). Dates use ISO format (YYYY-MM-DD). state: auto follows the live server, offline forces the off-season view, maintenance forces the maintenance view.",
   "state": "auto",
-  "number": null,
-  "name": "",
   "start": "",
   "end": "",
   "nextStart": "",

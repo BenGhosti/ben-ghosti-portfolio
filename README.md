@@ -70,12 +70,22 @@ The integrated system status dashboard aggregates availability data directly fro
 
 ### Benpixel season updates
 
-Edit [`benpixel/season.json`](benpixel/season.json) when a season starts or ends:
+The season number, Minecraft version, and maintenance state are read live from the server MOTD:
+
+* `Season 9` → season number `9`
+* `26.1-26.1.2` or `26.1.2` → Minecraft version (ranges are shown as `26.1 – 26.1.2`)
+* a MOTD containing `maint` (case-insensitive) → maintenance state
+* the software (Paper, Fabric, …) is no longer displayed
+
+The season number is cached in the browser, so it stays visible when the server is offline.
+
+[`benpixel/season.json`](benpixel/season.json) still holds the editorial data:
 
 * `state` — `auto` follows the live server, `offline` forces the off-season view, `maintenance` forces the maintenance view.
-* `number`, `name`, `start`, `end`, `nextStart` — season metadata and countdown. Dates use `YYYY-MM-DD`; leave empty if unknown.
-* `highlights` — cards shown next to the season summary.
-* `archive` — optional list of past seasons (`name` / `period` / `note`).
+* `start`, `end` — the season window. If the server is offline inside this window, the page shows **Currently offline**; outside it shows **Off-Season**. Dates use `YYYY-MM-DD`.
+* `nextStart` — used for the off-season countdown.
+* `description`, `highlights`, `archive` — visible content.
+* `whitelist` — controls the whitelist form.
 
 The page reads the Minecraft status live from `benpixel.ben-ghosti.de` via `api.mcsrvstat.us` (with `api.mcstatus.io` as fallback).
 
