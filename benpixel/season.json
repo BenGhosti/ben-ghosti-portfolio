@@ -1,0 +1,26 @@
+{
+  "_comment": "Season metadata for /benpixel/. Edit this file when a season starts or ends. Dates use ISO format (YYYY-MM-DD). Leave fields empty if unknown; the page falls back to live server data. state: auto follows the live server, offline forces the off-season view, maintenance forces the maintenance view.",
+  "state": "auto",
+  "number": null,
+  "name": "",
+  "start": "",
+  "end": "",
+  "nextStart": "",
+  "message": "",
+  "description": "Benpixel runs in seasons. Each season opens a fresh world for a limited time, then closes and is archived before the next one begins. When the server is offline, this page switches to off-season mode automatically.",
+  "highlights": [
+    {
+      "title": "Seasonal worlds",
+      "body": "Every season starts with a fresh world and a clean slate."
+    },
+    {
+      "title": "Vanilla-first",
+      "body": "Lightweight quality-of-life adjustments. No pay-to-win, no clutter."
+    },
+    {
+      "title": "Archived history",
+      "body": "Season worlds are archived when they close, so nothing is lost."
+    }
+  ],
+  "archive": []
+}

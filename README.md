@@ -29,6 +29,7 @@ This repository contains the complete source code for [ben-ghosti.de](https://be
 | **🎓 School Stuff** | `/school/` | Integrated document management, custom stylesheets, and structured digital school notes. | New |
 | **🤝 Sponsors** | `/sponsors.html` | Overview of hardware suppliers, software partners, and infrastructure supporters. | Live |
 | **📈 System Status** | `/status.html` | Real-time health monitoring of local storage layers and self-hosted environments. | Live |
+| **🎮 Benpixel** | `/benpixel/` | Seasonal Minecraft server page with live status, season metadata, countdown, and join instructions. | New |
 
 ---
 
@@ -54,6 +55,10 @@ The integrated system status dashboard aggregates availability data directly fro
 ├── school/                 # Sub-Directory: Academic document repository
 │   ├── style.css           # Custom school layout styling
 │   └── math.html           # Embedded math & documentation stack
+├── benpixel/               # Sub-Directory: Seasonal Minecraft server page
+│   ├── index.html          # Benpixel landing page
+│   ├── season.json         # Season metadata (edit per season)
+│   └── assets/             # Page-specific CSS, JS, and images
 ├── index.html              # Main entry point & production hub
 ├── status.html             # System status portal
 ├── sponsors.html           # Partner index
@@ -61,6 +66,18 @@ The integrated system status dashboard aggregates availability data directly fro
 
 
 ```
+
+### Benpixel season updates
+
+Edit [`benpixel/season.json`](benpixel/season.json) when a season starts or ends:
+
+* `state` — `auto` follows the live server, `offline` forces the off-season view, `maintenance` forces the maintenance view.
+* `number`, `name`, `start`, `end`, `nextStart` — season metadata and countdown. Dates use `YYYY-MM-DD`; leave empty if unknown.
+* `highlights` — cards shown next to the season summary.
+* `archive` — optional list of past seasons (`name` / `period` / `note`).
+
+The page reads the Minecraft status live from `benpixel.ben-ghosti.de` via `api.mcsrvstat.us` (with `api.mcstatus.io` as fallback).
+
 ---
 
 ## 📡 Signal & Exchange
