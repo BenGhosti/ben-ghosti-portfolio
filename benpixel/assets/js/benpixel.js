@@ -35,6 +35,45 @@
     { title: 'Archived history', body: 'Season worlds are archived when they close, so nothing is lost.' }
   ];
 
+  const FALLBACK_HISTORY = [
+    {
+      date: 'Early 2021',
+      badge: 'Genesis',
+      title: 'First Deployment',
+      body: 'The first server ran on G-Portal shared hosting, then moved to a self-managed PaperMC build on a local Windows machine for faster iteration.',
+      tags: ['G-Portal', 'PaperMC', 'Windows Host']
+    },
+    {
+      date: '2021 – 2022',
+      badge: 'Virtualization',
+      title: 'Hypervisor Leap',
+      body: 'A headless Proxmox VE setup replaced the single Windows host, separating the game server into isolated Linux VMs.',
+      tags: ['Proxmox VE', 'Linux VMs', 'Headless']
+    },
+    {
+      date: '2022 – 2024',
+      badge: 'Bare Metal',
+      title: 'Enterprise Node',
+      body: 'Consumer hardware gave way to an enterprise Supermicro Xeon node, with JVM and garbage-collection tuning for stable throughput.',
+      tags: ['Supermicro Xeon', 'JVM Tuning', 'G1GC']
+    },
+    {
+      date: '2024 – 2025',
+      badge: 'Co-Location',
+      title: 'Datacenter Migration',
+      body: 'The server moved to co-located infrastructure in the Netherlands on a dedicated Ryzen 7 7700X node for stronger single-thread performance.',
+      tags: ['Skylink DC · NL', 'Ryzen 7 7700X', 'Co-Location']
+    },
+    {
+      date: '2026',
+      badge: 'Revolutions',
+      title: 'Benpixel Revolutions',
+      body: 'The current chapter: a seasonal server with a live status page, a rules agreement, and a whitelist request flow. Built to reset, return, and improve every season.',
+      tags: ['Seasonal', 'Live Status', 'Whitelist'],
+      highlight: true
+    }
+  ];
+
   const state = {
     season: null,
     server: null,
@@ -83,6 +122,7 @@
     highlights: $('#season-highlights'),
     archive: $('#season-archive'),
     archiveList: $('#archive-list'),
+    historyTimeline: $('#history-timeline'),
     joinAddress: $('#join-address'),
     joinVersion: $('#join-version'),
     discordLink: $('#discord-link'),
@@ -208,6 +248,7 @@
     renderSeason();
     renderHighlights(state.season || {});
     renderArchive();
+    renderHistory();
     renderWhitelist();
     updateJoin();
   }
@@ -355,6 +396,68 @@
 
       li.append(name, meta);
       els.archiveList.appendChild(li);
+    });
+  }
+
+  function renderHistory() {
+    if (!els.historyTimeline) return;
+
+    const history = Array.isArray(state.season?.history) && state.season.history.length
+      ? state.season.history
+      : FALLBACK_HISTORY;
+
+    els.historyTimeline.replaceChildren();
+
+    history.forEach((item) => {
+      const row = document.createElement('div');
+      row.className = 'bp-timeline-item';
+      if (item.highlight) row.classList.add('is-latest');
+      row.classList.add('reveal');
+
+      const marker = document.createElement('span');
+      marker.className = 'bp-timeline-marker';
+      marker.setAttribute('aria-hidden', 'true');
+
+      const card = document.createElement('article');
+      card.className = 'card-2 bp-timeline-card';
+
+      const head = document.createElement('header');
+      head.className = 'bp-timeline-head';
+
+      const date = document.createElement('span');
+      date.className = 'bp-timeline-date';
+      date.textContent = item.date || '';
+
+      const badge = document.createElement('span');
+      badge.className = 'bp-timeline-badge';
+      badge.textContent = item.badge || '';
+
+      head.append(date, badge);
+
+      const title = document.createElement('h3');
+      title.className = 'bp-timeline-title';
+      title.textContent = item.title || '';
+
+      const body = document.createElement('p');
+      body.className = 'bp-timeline-body';
+      body.textContent = item.body || '';
+
+      card.append(head, title, body);
+
+      if (Array.isArray(item.tags) && item.tags.length) {
+        const tags = document.createElement('ul');
+        tags.className = 'card-tags';
+        item.tags.forEach((tag) => {
+          const li = document.createElement('li');
+          li.textContent = tag;
+          tags.appendChild(li);
+        });
+        card.appendChild(tags);
+      }
+
+      row.append(marker, card);
+      els.historyTimeline.appendChild(row);
+      observeReveal(row);
     });
   }
 

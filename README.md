@@ -86,6 +86,7 @@ The season number is cached in the browser, so it stays visible when the server 
 * `nextStart` — used for the off-season countdown.
 * `description`, `highlights`, `archive` — visible content.
 * `discord` — Discord invite URL for the Join button. Leave empty to link to the contact hub.
+* `history` — timeline entries (`date`, `badge`, `title`, `body`, `tags`, optional `highlight`). The History section renders them; `highlight: true` marks the latest chapter.
 * `whitelist` — controls the whitelist form.
 
 The page reads the Minecraft status live from `benpixel.ben-ghosti.de` via `api.mcsrvstat.us` (with `api.mcstatus.io` as fallback).
