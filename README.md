@@ -58,6 +58,7 @@ The integrated system status dashboard aggregates availability data directly fro
 ├── benpixel/               # Sub-Directory: Seasonal Minecraft server page
 │   ├── index.html          # Benpixel landing page
 │   ├── season.json         # Season metadata (edit per season)
+│   ├── rules.pdf           # Current server rules (replace per update)
 │   └── assets/             # Page-specific CSS, JS, and images
 ├── index.html              # Main entry point & production hub
 ├── status.html             # System status portal
@@ -77,6 +78,14 @@ Edit [`benpixel/season.json`](benpixel/season.json) when a season starts or ends
 * `archive` — optional list of past seasons (`name` / `period` / `note`).
 
 The page reads the Minecraft status live from `benpixel.ben-ghosti.de` via `api.mcsrvstat.us` (with `api.mcstatus.io` as fallback).
+
+### Benpixel rules & agreement
+
+* The current ruleset lives at [`benpixel/rules.pdf`](benpixel/rules.pdf). Replace it whenever the rules change.
+* The page opens it in a modal PDF viewer with an "open in new tab" fallback.
+* The server address stays blurred and the copy button stays disabled until the visitor accepts the rules.
+* The agreement is stored in the browser (`localStorage`) and tied to the rules version.
+* When the PDF changes, bump `RULES.version` in [`benpixel/assets/js/benpixel.js`](benpixel/assets/js/benpixel.js) so returning visitors have to agree again.
 
 ---
 

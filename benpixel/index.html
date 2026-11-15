@@ -190,20 +190,21 @@
 <header class="section-header">
 <p class="section-index">03 / How to Join</p>
 <h2 class="section-title">Connect in a minute.</h2>
-<p class="section-lead">Java Edition. Add the address below to your server list or use direct connect. When the season is live, the server is open.</p>
+<p class="section-lead">Java Edition. Read the server rules, agree to them, then add the address to your server list. When the season is live, the server is open.</p>
 </header>
 
 <div class="bp-join-grid">
-<article class="card-2 bp-address-card">
+<article class="card-2 bp-address-card" id="address-card">
 <span class="bp-meta-label">Server address</span>
-<p class="bp-address" id="join-address">benpixel.ben-ghosti.de</p>
-<button class="bp-copy-btn" id="copy-address" type="button">
+<p aria-describedby="address-note" class="bp-address is-locked" id="join-address">benpixel.ben-ghosti.de</p>
+<button class="bp-copy-btn" disabled id="copy-address" type="button">
 <svg aria-hidden="true" fill="none" height="15" viewBox="0 0 15 15" width="15">
 <rect height="8" rx="1.5" stroke="currentColor" stroke-width="1.2" width="8" x="4" y="4"/>
 <path d="M3 11H2.5a1 1 0 01-1-1V2.5a1 1 0 011-1H10a1 1 0 011 1V3" stroke="currentColor" stroke-linecap="round" stroke-width="1.2"/>
 </svg>
 <span>Copy address</span>
 </button>
+<p class="bp-agree-note" id="address-note">Agree to the server rules to reveal the address.</p>
 </article>
 
 <article class="card-2">
@@ -224,14 +225,25 @@
 <a class="bp-inline-link" href="../index.html#links" id="discord-link">Open contact hub <span aria-hidden="true">↗</span></a>
 </article>
 
-<article class="card-2">
-<span class="bp-meta-label">House rules</span>
-<h3 class="card-title">Play fair.</h3>
-<ul class="bp-rules">
-<li>Respect other players and their builds.</li>
-<li>No cheating, exploiting, or griefing.</li>
-<li>Keep chat friendly and inclusive.</li>
-</ul>
+<article class="card-2 bp-rules-card">
+<span class="bp-meta-label">Server rules</span>
+<h3 class="card-title">Read before you join.</h3>
+<p class="card-body">The full ruleset is provided as a PDF. You must agree before the server address is revealed.</p>
+<div class="bp-rules-actions">
+<button aria-haspopup="dialog" class="bp-copy-btn" id="open-rules" type="button">
+<svg aria-hidden="true" fill="none" height="15" viewBox="0 0 15 15" width="15">
+<path d="M4 1.5h5l2.5 2.5v9.5a1 1 0 01-1 1h-6.5a1 1 0 01-1-1v-11a1 1 0 011-1z" stroke="currentColor" stroke-linejoin="round" stroke-width="1.2"/>
+<path d="M9 1.5V4h2.5M5 7h5M5 9.5h5" stroke="currentColor" stroke-linecap="round" stroke-width="1.2"/>
+</svg>
+<span>Read rules (PDF)</span>
+</button>
+<a class="bp-inline-link" href="rules.pdf" rel="noopener noreferrer" target="_blank">Open in new tab ↗</a>
+</div>
+<label class="bp-agree" for="agree-rules">
+<input id="agree-rules" type="checkbox"/>
+<span>I have read and agree to the server rules.</span>
+</label>
+<p class="bp-agree-note" id="agree-note">Agree to reveal the server address.</p>
 </article>
 </div>
 </section>
@@ -262,6 +274,26 @@
 </div>
 </section>
 </main>
+
+<div aria-hidden="true" class="bp-modal" id="rules-modal">
+<div class="bp-modal-backdrop" data-close-rules=""></div>
+<div aria-labelledby="rules-modal-title" aria-modal="true" class="bp-modal-dialog" role="dialog">
+<header class="bp-modal-head">
+<div>
+<p class="bp-meta-label">Benpixel</p>
+<h2 class="bp-modal-title" id="rules-modal-title">Server rules</h2>
+</div>
+<button aria-label="Close rules" class="bp-modal-close" id="close-rules" type="button">&times;</button>
+</header>
+<div class="bp-modal-body">
+<iframe class="bp-modal-frame" data-src="rules.pdf" id="rules-frame" src="about:blank" title="Benpixel server rules (PDF)"></iframe>
+</div>
+<footer class="bp-modal-foot">
+<a class="bp-inline-link" href="rules.pdf" rel="noopener noreferrer" target="_blank">Open PDF in a new tab ↗</a>
+<button class="bp-copy-btn" id="modal-agree" type="button">I have read and agree</button>
+</footer>
+</div>
+</div>
 
 <footer class="site-footer">
 <div class="footer-inner">

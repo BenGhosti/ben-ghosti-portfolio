@@ -16,6 +16,11 @@
     discord: ''
   };
 
+  const RULES = {
+    version: '2026-11-15',
+    storageKey: 'benpixel.rules.agreement'
+  };
+
   const FALLBACK_DESCRIPTION = 'Benpixel runs in seasons. Each season opens a fresh world for a limited time, then closes and is archived before the next one begins.';
 
   const FALLBACK_HIGHLIGHTS = [
@@ -31,7 +36,9 @@
     countdownTimer: null,
     toastTimer: null,
     lastRefreshAt: 0,
-    lastMotd: null
+    lastMotd: null,
+    agreed: false,
+    lastFocused: null
   };
 
   const $ = (selector, root = document) => root.querySelector(selector);
@@ -71,6 +78,15 @@
     joinVersion: $('#join-version'),
     discordLink: $('#discord-link'),
     copyButton: $('#copy-address'),
+    addressCard: $('#address-card'),
+    addressNote: $('#address-note'),
+    agreeCheckbox: $('#agree-rules'),
+    agreeNote: $('#agree-note'),
+    openRules: $('#open-rules'),
+    rulesModal: $('#rules-modal'),
+    closeRules: $('#close-rules'),
+    rulesFrame: $('#rules-frame'),
+    modalAgree: $('#modal-agree'),
     toast: $('#bp-toast'),
     toastText: $('#bp-toast-text')
   };
@@ -592,17 +608,174 @@
     }, 3200);
   }
 
+  /* ── Rules agreement / PDF viewer ─────────────────────────── */
+
+  function loadAgreement() {
+    try {
+      const raw = window.localStorage.getItem(RULES.storageKey);
+      if (!raw) return false;
+      const stored = JSON.parse(raw);
+      return Boolean(stored && stored.version === RULES.version && stored.agreed === true);
+    } catch (error) {
+      return false;
+    }
+  }
+
+  function saveAgreement(agreed) {
+    try {
+      if (agreed) {
+        window.localStorage.setItem(RULES.storageKey, JSON.stringify({
+          version: RULES.version,
+          agreed: true,
+          agreedAt: new Date().toISOString()
+        }));
+      } else {
+        window.localStorage.removeItem(RULES.storageKey);
+      }
+    } catch (error) {
+      /* Storage can be unavailable (private mode); session state still works. */
+    }
+  }
+
+  function setAgreed(agreed, options = {}) {
+    state.agreed = Boolean(agreed);
+
+    if (!options.silent) saveAgreement(state.agreed);
+    updateAgreementUI();
+
+    if (state.agreed && !options.silent) {
+      showToast('Rules accepted. Server address unlocked.');
+    }
+  }
+
+  function updateAgreementUI() {
+    const agreed = state.agreed;
+
+    if (els.agreeCheckbox) els.agreeCheckbox.checked = agreed;
+    if (els.joinAddress) els.joinAddress.classList.toggle('is-locked', !agreed);
+    if (els.copyButton) els.copyButton.disabled = !agreed;
+    if (els.addressCard) els.addressCard.classList.toggle('is-unlocked', agreed);
+
+    setText(
+      els.addressNote,
+      agreed
+        ? 'Rules accepted. The address is ready to copy.'
+        : 'Agree to the server rules to reveal the address.'
+    );
+
+    setText(
+      els.agreeNote,
+      agreed
+        ? 'Rules accepted for this rules version.'
+        : 'Agree to reveal the server address.'
+    );
+  }
+
+  function isRulesModalOpen() {
+    return Boolean(els.rulesModal && els.rulesModal.classList.contains('is-open'));
+  }
+
+  function openRulesModal() {
+    if (!els.rulesModal) return;
+
+    state.lastFocused = document.activeElement;
+
+    if (els.rulesFrame && els.rulesFrame.getAttribute('src') === 'about:blank') {
+      els.rulesFrame.src = els.rulesFrame.dataset.src || 'rules.pdf';
+    }
+
+    els.rulesModal.classList.add('is-open');
+    els.rulesModal.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('bp-modal-open');
+
+    if (els.closeRules) els.closeRules.focus();
+  }
+
+  function closeRulesModal() {
+    if (!els.rulesModal) return;
+
+    els.rulesModal.classList.remove('is-open');
+    els.rulesModal.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('bp-modal-open');
+
+    if (state.lastFocused && typeof state.lastFocused.focus === 'function') {
+      state.lastFocused.focus();
+    }
+  }
+
+  function trapRulesFocus(event) {
+    if (event.key !== 'Tab' || !isRulesModalOpen()) return;
+
+    const dialog = els.rulesModal.querySelector('.bp-modal-dialog');
+    if (!dialog) return;
+
+    const focusable = Array.from(dialog.querySelectorAll(
+      'a[href], button:not([disabled]), iframe, input, [tabindex]:not([tabindex="-1"])'
+    )).filter((element) => element.offsetParent !== null || element === document.activeElement);
+
+    if (!focusable.length) return;
+
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault();
+      first.focus();
+    }
+  }
+
+  function handleRulesKeydown(event) {
+    if (event.key === 'Escape' && isRulesModalOpen()) {
+      closeRulesModal();
+    }
+    trapRulesFocus(event);
+  }
+
   /* ── Init ──────────────────────────────────────────────────── */
 
   function init() {
+    setAgreed(loadAgreement(), { silent: true });
+    updateJoin();
+
     if (els.copyButton) {
       els.copyButton.addEventListener('click', async () => {
+        if (!state.agreed) {
+          showToast('Please read and agree to the rules first.');
+          openRulesModal();
+          return;
+        }
+
         const copied = await copyText(CONFIG.host);
         showToast(copied ? 'Server address copied.' : 'Could not copy — select the address manually.');
       });
     }
 
-    updateJoin();
+    if (els.openRules) els.openRules.addEventListener('click', openRulesModal);
+    if (els.closeRules) els.closeRules.addEventListener('click', closeRulesModal);
+
+    if (els.rulesModal) {
+      els.rulesModal.querySelectorAll('[data-close-rules]').forEach((element) => {
+        element.addEventListener('click', closeRulesModal);
+      });
+    }
+
+    if (els.agreeCheckbox) {
+      els.agreeCheckbox.addEventListener('change', () => {
+        setAgreed(els.agreeCheckbox.checked);
+      });
+    }
+
+    if (els.modalAgree) {
+      els.modalAgree.addEventListener('click', () => {
+        setAgreed(true);
+        closeRulesModal();
+      });
+    }
+
+    document.addEventListener('keydown', handleRulesKeydown);
 
     loadSeason().then(() => {
       refreshServer();
