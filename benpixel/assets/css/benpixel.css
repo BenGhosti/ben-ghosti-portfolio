@@ -4,6 +4,8 @@
    Only page-specific layout and server-state visuals live here.
    ───────────────────────────────────────────────────────────── */
 
+html { overflow-x: hidden; }
+
 .bp-page {
   background: var(--bg-0);
 }
