@@ -1160,25 +1160,6 @@
 
 /* ── Footer / toast ────────────────────────────────────────── */
 
-.bp-disclaimer {
-  max-width: var(--maxw);
-  margin: 22px auto 0;
-  padding-top: 18px;
-  border-top: 1px solid var(--line);
-  font-size: 11px;
-  letter-spacing: 0.04em;
-  color: var(--ink-2);
-  text-align: center;
-}
-
-.bp-page .footer-legal-link {
-  color: var(--ink-2);
-}
-
-.bp-page .footer-legal-link:hover {
-  color: var(--ink-0);
-}
-
 .bp-toast {
   position: fixed;
   left: 50%;
