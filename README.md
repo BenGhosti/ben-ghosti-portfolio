@@ -125,11 +125,11 @@ Discord: Ben_Ghosti (Open for technical exchange and lab discussions)
 
 ## Performance & Cloudflare
 
-The production site runs behind Cloudflare in front of GitHub Pages. Two things matter for repeat visits and Lighthouse:
+The production site is served through Cloudflare. The repo ships a [`_headers`](_headers) file for Cloudflare Pages/Netlify; if the origin is GitHub Pages behind Cloudflare, add a **Cache Rule** instead. Two things matter for repeat visits and Lighthouse:
 
 ### Static asset caching
 
-GitHub Pages sends a short `Cache-Control` for static files. The repo ships a [`_headers`](_headers) file for hosts that support response-header files (Cloudflare Pages, Netlify). For the current Cloudflare proxy setup, add a **Cache Rule** instead:
+Static hosts often send a short `Cache-Control` for static files. The `_headers` file sets a one-year cache for hashed/versioned assets. For a Cloudflare proxy setup, add a **Cache Rule**:
 
 * Match `/assets/*` and `/benpixel/assets/*`
 * Edge TTL: **1 year**
