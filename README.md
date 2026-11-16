@@ -129,23 +129,27 @@ The production site is served through Cloudflare. The repo ships a [`_headers`](
 
 ### Static asset caching
 
-Static hosts often send a short `Cache-Control` for static files. The `_headers` file sets a one-year cache for hashed/versioned assets. For a Cloudflare proxy setup, add a **Cache Rule**:
+Static hosts often send a short `Cache-Control` for static files. The `_headers` file uses a one-year cache for CSS/JS/fonts and a 30-day cache for images. For a Cloudflare proxy setup, add a **Cache Rule**:
 
-* Match `/assets/*` and `/benpixel/assets/*`
-* Edge TTL: **1 year**
-* Browser TTL: **1 year**
+* `/assets/css/*`, `/assets/js/*`, `/assets/fonts/*`, `/benpixel/assets/css/*`, `/benpixel/assets/js/*`, `/benpixel/assets/fonts/*`: Edge TTL **1 year**, Browser TTL **1 year**
+* `/assets/images/*`, `/benpixel/assets/images/*`: Edge TTL **30 days**, Browser TTL **30 days**
 * Cache eligibility: **Eligible**
 
-For an Nginx origin, cache static assets for one year and keep HTML short-lived:
+For an Nginx origin, keep HTML short-lived and split the asset TTLs:
 
 ```nginx
-location ~* \.(?:css|js|woff2|jpe?g|png|webp|avif)$ {
+location ~* \.(?:css|js|woff2)$ {
   expires 1y;
   add_header Cache-Control "public, immutable";
 }
+
+location ~* \.(?:jpe?g|png|webp|avif)$ {
+  expires 30d;
+  add_header Cache-Control "public";
+}
 ```
 
-All CSS, JS, fonts and images referenced by the pages use `?v=YYYYMMDD-N` cache-busting query strings or versioned filenames. Bump the suffix/filename whenever an asset changes, then purge the Cloudflare cache for that URL.
+CSS and JavaScript references use `?v=YYYYMMDD-N` cache-busting query strings. Image filenames stay stable and use the 30-day cache; purge those URLs in Cloudflare when an image changes.
 
 ### Cloudflare-injected scripts
 
