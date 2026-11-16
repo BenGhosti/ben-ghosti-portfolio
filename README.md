@@ -136,7 +136,16 @@ Static hosts often send a short `Cache-Control` for static files. The `_headers`
 * Browser TTL: **1 year**
 * Cache eligibility: **Eligible**
 
-All CSS, JS, fonts and images referenced by the pages use `?v=YYYYMMDD-N` cache-busting query strings. Bump the suffix whenever an asset changes, then purge the Cloudflare cache for that URL.
+For an Nginx origin, cache static assets for one year and keep HTML short-lived:
+
+```nginx
+location ~* \.(?:css|js|woff2|jpe?g|png|webp|avif)$ {
+  expires 1y;
+  add_header Cache-Control "public, immutable";
+}
+```
+
+All CSS, JS, fonts and images referenced by the pages use `?v=YYYYMMDD-N` cache-busting query strings or versioned filenames. Bump the suffix/filename whenever an asset changes, then purge the Cloudflare cache for that URL.
 
 ### Cloudflare-injected scripts
 
