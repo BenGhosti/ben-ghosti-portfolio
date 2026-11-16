@@ -51,25 +51,25 @@
       tags: ['Proxmox VE', 'Linux VMs', 'Headless']
     },
     {
-      date: '2022 – 2024',
+      date: '2022 – 2023',
       badge: 'Bare Metal',
       title: 'Enterprise Node',
       body: 'Consumer hardware gave way to an enterprise Supermicro Xeon node, with JVM and garbage-collection tuning for stable throughput.',
       tags: ['Supermicro Xeon', 'JVM Tuning', 'G1GC']
     },
     {
-      date: '2024 – 2025',
+      date: '2023 – 2024',
       badge: 'Co-Location',
-      title: 'Datacenter Migration',
-      body: 'The server moved to co-located infrastructure in the Netherlands on a dedicated Ryzen 7 7700X node for stronger single-thread performance.',
-      tags: ['Skylink DC · NL', 'Ryzen 7 7700X', 'Co-Location']
+      title: 'Skylink, Netherlands',
+      body: 'The server moved to co-located infrastructure at Skylink in the Netherlands on a dedicated Ryzen 7 7700X node for stronger single-thread performance.',
+      tags: ['Skylink · NL', 'Ryzen 7 7700X', 'Co-Location']
     },
     {
-      date: '2026',
+      date: '2025 – Present',
       badge: 'Revolutions',
       title: 'Benpixel Revolutions',
-      body: 'The current chapter: a seasonal server with a live status page, a rules agreement, and a whitelist request flow. Built to reset, return, and improve every season.',
-      tags: ['Seasonal', 'Live Status', 'Whitelist'],
+      body: 'Since 2025 the server runs on high-performance machines at NTT Data in Frankfurt. The current chapter adds a live status page, a rules agreement, and a whitelist request flow.',
+      tags: ['NTT Data · Frankfurt', 'High-performance', 'Seasonal'],
       highlight: true
     }
   ];
@@ -95,7 +95,6 @@
   const els = {
     heroChip: $('#hero-chip'),
     heroStatus: $('#hero-status'),
-    heroSeason: $('#hero-season'),
     heroVersion: $('#hero-version'),
     heroHost: $('#hero-host'),
     panel: $('#status-panel'),
@@ -307,7 +306,6 @@
 
     setText(els.seasonTitle, title);
     setText(els.seasonDescription, season.description || FALLBACK_DESCRIPTION);
-    setText(els.heroSeason, number !== null ? String(number) : '');
 
     const start = parseDate(season.start);
     const end = parseDate(season.end);
@@ -399,6 +397,104 @@
     });
   }
 
+  let beamFillFrame = null;
+
+  function scheduleBeamFill() {
+    if (beamFillFrame !== null) return;
+    beamFillFrame = window.requestAnimationFrame(() => {
+      beamFillFrame = null;
+      updateBeamFill();
+    });
+  }
+
+  function updateBeamFill() {
+    if (!els.historyTimeline) return;
+
+    const beam = els.historyTimeline.querySelector('.bp-timeline-beam');
+    const fill = beam?.querySelector('.bp-timeline-beam-fill');
+    if (!beam || !fill) return;
+
+    const rect = beam.getBoundingClientRect();
+    if (!rect.height) {
+      fill.style.height = '0%';
+      return;
+    }
+
+    const start = window.innerHeight * 0.82;
+    const end = window.innerHeight * 0.18;
+    const progress = Math.min(1, Math.max(0, (start - rect.top) / (rect.height + start - end)));
+    fill.style.height = `${Math.round(progress * 100)}%`;
+  }
+
+  function layoutHistory() {
+    if (!els.historyTimeline) return;
+
+    const timeline = els.historyTimeline;
+    const beam = timeline.querySelector('.bp-timeline-beam');
+    const entries = Array.from(timeline.querySelectorAll('.bp-timeline-entry'));
+    if (!entries.length) return;
+
+    const isDesktop = window.matchMedia('(min-width: 1025px)').matches;
+    timeline.classList.toggle('bp-timeline--stacked', !isDesktop);
+
+    entries.forEach((entry) => {
+      entry.style.top = '';
+      entry.style.left = '';
+      entry.style.width = '';
+    });
+    timeline.style.height = '';
+    if (beam) beam.style.height = '';
+
+    if (!isDesktop) {
+      updateBeamFill();
+      return;
+    }
+
+    const gap = 30;
+    let leftY = 0;
+    let rightY = 110;
+    let maxY = 0;
+    const finalEntry = entries.find((entry) => entry.classList.contains('bp-timeline-entry--final'));
+    const normalEntries = entries.filter((entry) => entry !== finalEntry);
+
+    normalEntries.forEach((entry, index) => {
+      const side = index % 2 === 0 ? 'left' : 'right';
+      entry.dataset.side = side;
+      entry.style.left = side === 'left' ? '0' : '50%';
+      entry.style.width = '50%';
+
+      const card = entry.querySelector('.bp-timeline-card');
+      const height = Math.ceil(card.getBoundingClientRect().height);
+      const top = side === 'left' ? leftY : rightY;
+
+      entry.style.setProperty('--node-y', `${Math.round(height / 2)}px`);
+      entry.style.top = `${top}px`;
+
+      if (side === 'left') leftY = top + height + gap;
+      else rightY = top + height + gap;
+      maxY = Math.max(maxY, top + height);
+    });
+
+    let beamHeight = maxY;
+
+    if (finalEntry) {
+      finalEntry.style.left = '50%';
+      finalEntry.style.width = 'min(760px, 84%)';
+
+      const card = finalEntry.querySelector('.bp-timeline-card');
+      const height = Math.ceil(card.getBoundingClientRect().height);
+      const top = Math.max(leftY, rightY) + 54;
+
+      finalEntry.style.top = `${top}px`;
+      beamHeight = top;
+      maxY = top + height;
+    }
+
+    timeline.style.height = `${maxY + 24}px`;
+    if (beam) beam.style.height = `${beamHeight}px`;
+    updateBeamFill();
+  }
+
   function renderHistory() {
     if (!els.historyTimeline) return;
 
@@ -408,18 +504,39 @@
 
     els.historyTimeline.replaceChildren();
 
-    history.forEach((item) => {
-      const row = document.createElement('div');
-      row.className = 'bp-timeline-item';
-      if (item.highlight) row.classList.add('is-latest');
-      row.classList.add('reveal');
+    const beam = document.createElement('div');
+    beam.className = 'bp-timeline-beam';
+    beam.setAttribute('aria-hidden', 'true');
+    ['bp-timeline-beam-glow', 'bp-timeline-beam-fill', 'bp-timeline-beam-pulse'].forEach((className) => {
+      const span = document.createElement('span');
+      span.className = className;
+      beam.appendChild(span);
+    });
+    els.historyTimeline.appendChild(beam);
 
-      const marker = document.createElement('span');
-      marker.className = 'bp-timeline-marker';
-      marker.setAttribute('aria-hidden', 'true');
+    history.forEach((item, index) => {
+      const entry = document.createElement('article');
+      entry.className = 'bp-timeline-entry';
+      entry.dataset.index = String(index);
+      const isFinal = Boolean(item.highlight);
+      if (isFinal) entry.classList.add('bp-timeline-entry--final');
+
+      const node = document.createElement('span');
+      node.className = 'bp-timeline-node';
+      node.setAttribute('aria-hidden', 'true');
+
+      const connector = document.createElement('span');
+      connector.className = 'bp-timeline-connector';
+      connector.setAttribute('aria-hidden', 'true');
+
+      const indexLabel = document.createElement('span');
+      indexLabel.className = 'bp-timeline-index';
+      indexLabel.textContent = String(index + 1).padStart(2, '0');
+      indexLabel.setAttribute('aria-hidden', 'true');
 
       const card = document.createElement('article');
       card.className = 'card-2 bp-timeline-card';
+      if (isFinal) card.classList.add('bp-timeline-card--final');
 
       const head = document.createElement('header');
       head.className = 'bp-timeline-head';
@@ -455,10 +572,20 @@
         card.appendChild(tags);
       }
 
-      row.append(marker, card);
-      els.historyTimeline.appendChild(row);
-      observeReveal(row);
+      entry.append(node, connector, indexLabel, card);
+      els.historyTimeline.appendChild(entry);
+
+      if (isFinal) {
+        card.classList.add('reveal');
+        observeReveal(card);
+      } else {
+        entry.classList.add('reveal');
+        observeReveal(entry);
+      }
     });
+
+    layoutHistory();
+    updateBeamFill();
   }
 
   /* ── Countdown ─────────────────────────────────────────────── */
@@ -1121,6 +1248,24 @@
     }
 
     document.addEventListener('keydown', handleRulesKeydown);
+
+    window.addEventListener('scroll', scheduleBeamFill, { passive: true });
+
+    let historyResizeTimer = null;
+    window.addEventListener('resize', () => {
+      window.clearTimeout(historyResizeTimer);
+      historyResizeTimer = window.setTimeout(() => {
+        layoutHistory();
+        updateBeamFill();
+      }, 150);
+    });
+
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(() => {
+        layoutHistory();
+        updateBeamFill();
+      });
+    }
 
     loadSeason().then(() => {
       refreshServer();

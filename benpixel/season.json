@@ -38,25 +38,25 @@
       "tags": ["Proxmox VE", "Linux VMs", "Headless"]
     },
     {
-      "date": "2022 – 2024",
+      "date": "2022 – 2023",
       "badge": "Bare Metal",
       "title": "Enterprise Node",
       "body": "Consumer hardware gave way to an enterprise Supermicro Xeon node, with JVM and garbage-collection tuning for stable throughput.",
       "tags": ["Supermicro Xeon", "JVM Tuning", "G1GC"]
     },
     {
-      "date": "2024 – 2025",
+      "date": "2023 – 2024",
       "badge": "Co-Location",
-      "title": "Datacenter Migration",
-      "body": "The server moved to co-located infrastructure in the Netherlands on a dedicated Ryzen 7 7700X node for stronger single-thread performance.",
-      "tags": ["Skylink DC · NL", "Ryzen 7 7700X", "Co-Location"]
+      "title": "Skylink, Netherlands",
+      "body": "The server moved to co-located infrastructure at Skylink in the Netherlands on a dedicated Ryzen 7 7700X node for stronger single-thread performance.",
+      "tags": ["Skylink · NL", "Ryzen 7 7700X", "Co-Location"]
     },
     {
-      "date": "2026",
+      "date": "2025 – Present",
       "badge": "Revolutions",
       "title": "Benpixel Revolutions",
-      "body": "The current chapter: a seasonal server with a live status page, a rules agreement, and a whitelist request flow. Built to reset, return, and improve every season.",
-      "tags": ["Seasonal", "Live Status", "Whitelist"],
+      "body": "Since 2025 the server runs on high-performance machines at NTT Data in Frankfurt. The current chapter adds a live status page, a rules agreement, and a whitelist request flow.",
+      "tags": ["NTT Data · Frankfurt", "High-performance", "Seasonal"],
       "highlight": true
     }
   ],
