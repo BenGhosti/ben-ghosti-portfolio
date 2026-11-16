@@ -66,8 +66,8 @@
     },
     {
       date: '2025 – Present',
-      badge: 'Revolutions',
-      title: 'Benpixel Revolutions',
+      badge: 'NTT Data',
+      title: 'NTT Data Frankfurt',
       body: 'Since 2025 the server runs on high-performance machines at NTT Data in Frankfurt. The current chapter adds a live status page, a rules agreement, and a whitelist request flow.',
       tags: ['NTT Data · Frankfurt', 'High-performance', 'Seasonal'],
       highlight: true
@@ -454,10 +454,9 @@
     let leftY = 0;
     let rightY = 110;
     let maxY = 0;
-    const finalEntry = entries.find((entry) => entry.classList.contains('bp-timeline-entry--final'));
-    const normalEntries = entries.filter((entry) => entry !== finalEntry);
+    let maxNodeY = 0;
 
-    normalEntries.forEach((entry, index) => {
+    entries.forEach((entry, index) => {
       const side = index % 2 === 0 ? 'left' : 'right';
       entry.dataset.side = side;
       entry.style.left = side === 'left' ? '0' : '50%';
@@ -466,30 +465,19 @@
       const card = entry.querySelector('.bp-timeline-card');
       const height = Math.ceil(card.getBoundingClientRect().height);
       const top = side === 'left' ? leftY : rightY;
+      const nodeY = top + height / 2;
 
       entry.style.setProperty('--node-y', `${Math.round(height / 2)}px`);
       entry.style.top = `${top}px`;
+
+      maxNodeY = Math.max(maxNodeY, nodeY);
 
       if (side === 'left') leftY = top + height + gap;
       else rightY = top + height + gap;
       maxY = Math.max(maxY, top + height);
     });
 
-    let beamHeight = maxY;
-
-    if (finalEntry) {
-      finalEntry.style.left = '50%';
-      finalEntry.style.width = 'min(760px, 84%)';
-
-      const card = finalEntry.querySelector('.bp-timeline-card');
-      const height = Math.ceil(card.getBoundingClientRect().height);
-      const top = Math.max(leftY, rightY) + 54;
-
-      finalEntry.style.top = `${top}px`;
-      beamHeight = top;
-      maxY = top + height;
-    }
-
+    const beamHeight = maxNodeY + 32;
     timeline.style.height = `${maxY + 24}px`;
     if (beam) beam.style.height = `${beamHeight}px`;
     updateBeamFill();
@@ -518,8 +506,7 @@
       const entry = document.createElement('article');
       entry.className = 'bp-timeline-entry';
       entry.dataset.index = String(index);
-      const isFinal = Boolean(item.highlight);
-      if (isFinal) entry.classList.add('bp-timeline-entry--final');
+      if (item.highlight) entry.classList.add('is-latest');
 
       const node = document.createElement('span');
       node.className = 'bp-timeline-node';
@@ -536,7 +523,6 @@
 
       const card = document.createElement('article');
       card.className = 'card-2 bp-timeline-card';
-      if (isFinal) card.classList.add('bp-timeline-card--final');
 
       const head = document.createElement('header');
       head.className = 'bp-timeline-head';
@@ -574,14 +560,8 @@
 
       entry.append(node, connector, indexLabel, card);
       els.historyTimeline.appendChild(entry);
-
-      if (isFinal) {
-        card.classList.add('reveal');
-        observeReveal(card);
-      } else {
-        entry.classList.add('reveal');
-        observeReveal(entry);
-      }
+      entry.classList.add('reveal');
+      observeReveal(entry);
     });
 
     layoutHistory();
