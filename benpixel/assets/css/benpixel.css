@@ -1166,15 +1166,6 @@ html { overflow-x: hidden; }
 
 /* ── Footer / toast ────────────────────────────────────────── */
 
-.bp-disclaimer {
-  max-width: var(--maxw);
-  margin: 16px auto 0;
-  font-size: 11px;
-  letter-spacing: 0.04em;
-  color: var(--ink-2);
-  text-align: center;
-}
-
 .bp-toast {
   position: fixed;
   left: 50%;
@@ -1503,7 +1494,6 @@ body.bp-modal-open {
   .bp-page .bp-timeline-index,
   .bp-page .bp-timeline-date,
   .bp-page .bp-timeline-badge,
-  .bp-page .bp-disclaimer,
   .bp-page .footer-meta,
   .bp-page .footer-legal-link {
     font-size: 12px;
