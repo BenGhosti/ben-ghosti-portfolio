@@ -24,10 +24,17 @@
   "archive": [],
   "history": [
     {
+      "date": "2020",
+      "badge": "Origin",
+      "title": "The First Lockdown",
+      "body": "Benpixel started during the first COVID-19 lockdown in 2020, running small on an old laptop. The first world was a test, not a plan.",
+      "tags": ["Lockdown", "Old Laptop", "First World"]
+    },
+    {
       "date": "Early 2021",
-      "badge": "Genesis",
-      "title": "First Deployment",
-      "body": "The first server ran on G-Portal shared hosting, then moved to a self-managed PaperMC build on a local Windows machine for faster iteration.",
+      "badge": "G-Portal",
+      "title": "First Hosting",
+      "body": "The project moved to G-Portal shared hosting, then to a self-managed PaperMC build on a local Windows machine for faster iteration.",
       "tags": ["G-Portal", "PaperMC", "Windows Host"]
     },
     {
