@@ -31,7 +31,8 @@ html { overflow-x: hidden; }
 
 .bp-hero .scroll-thumb {
   height: 12px;
-  top: -12px;
+  top: 0;
+  transform: translateY(-12px);
   animation: bpScrollFlow 2.2s var(--ease-premium) infinite;
 }
 
@@ -40,8 +41,8 @@ html { overflow-x: hidden; }
 }
 
 @keyframes bpScrollFlow {
-  0% { top: -12px; }
-  100% { top: 28px; }
+  0% { transform: translateY(-12px); }
+  100% { transform: translateY(28px); }
 }
 
 .bp-hero-image {
@@ -931,16 +932,18 @@ html { overflow-x: hidden; }
   left: 50%;
   top: 0;
   width: 2px;
-  height: 0;
-  transform: translateX(-50%);
+  height: 100%;
+  transform: translateX(-50%) scaleY(0);
+  transform-origin: top center;
   background: linear-gradient(180deg, #00f2fe 0%, #4facfe 55%, #7f00ff 100%);
   box-shadow: 0 0 16px rgba(0, 242, 254, 0.55);
-  transition: height 160ms linear;
+  transition: transform 160ms linear;
 }
 
 .bp-timeline-beam-pulse {
   position: absolute;
   left: 50%;
+  top: 0;
   width: 6px;
   height: 6px;
   margin-left: -3px;
@@ -949,13 +952,14 @@ html { overflow-x: hidden; }
   box-shadow: 0 0 14px rgba(0, 242, 254, 0.9);
   animation: bpBeamPulse 6s linear infinite;
   opacity: 0;
+  will-change: transform, opacity;
 }
 
 @keyframes bpBeamPulse {
-  0% { top: 0%; opacity: 0; }
+  0% { transform: translateY(0); opacity: 0; }
   12% { opacity: 0.9; }
   88% { opacity: 0.9; }
-  100% { top: 100%; opacity: 0; }
+  100% { transform: translateY(calc(var(--beam-height, 0px) - 6px)); opacity: 0; }
 }
 
 .bp-timeline-entry {
@@ -1457,5 +1461,51 @@ body.bp-modal-open {
 
   .bp-countdown {
     grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* Mobile: larger tap targets and legible supporting text. */
+@media (max-width: 720px) {
+  .bp-page .nav-link {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+  }
+
+  .bp-page .bp-inline-link,
+  .bp-page .footer-brand,
+  .bp-page .footer-legal-link {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .bp-page .bp-discord-btn,
+  .bp-page .cta-button,
+  .bp-page .bp-ghost-button {
+    min-height: 44px;
+  }
+
+  .bp-page .scroll-label,
+  .bp-page .bp-meta-label,
+  .bp-page .bp-players-label,
+  .bp-page .bp-status-meta dt,
+  .bp-page .bp-pill,
+  .bp-page .bp-countdown-unit > span:last-child,
+  .bp-page .bp-field label,
+  .bp-page .bp-hero-status,
+  .bp-page .bp-status-panel,
+  .bp-page .bp-season-kicker,
+  .bp-page .bp-season-facts dt,
+  .bp-page .bp-season-note,
+  .bp-page .bp-archive-title,
+  .bp-page .bp-archive-item span,
+  .bp-page .bp-timeline-index,
+  .bp-page .bp-timeline-date,
+  .bp-page .bp-timeline-badge,
+  .bp-page .bp-disclaimer,
+  .bp-page .footer-meta,
+  .bp-page .footer-legal-link {
+    font-size: 12px;
   }
 }

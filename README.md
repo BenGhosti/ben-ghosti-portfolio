@@ -120,3 +120,35 @@ Discord: Ben_Ghosti (Open for technical exchange and lab discussions)
 ## ⚖️License
 
 © 2026 BenGhosti. All rights reserved.
+
+---
+
+## Performance & Cloudflare
+
+The production site runs behind Cloudflare in front of GitHub Pages. Two things matter for repeat visits and Lighthouse:
+
+### Static asset caching
+
+GitHub Pages sends a short `Cache-Control` for static files. The repo ships a [`_headers`](_headers) file for hosts that support response-header files (Cloudflare Pages, Netlify). For the current Cloudflare proxy setup, add a **Cache Rule** instead:
+
+* Match `/assets/*` and `/benpixel/assets/*`
+* Edge TTL: **1 year**
+* Browser TTL: **1 year**
+* Cache eligibility: **Eligible**
+
+All CSS, JS, fonts and images referenced by the pages use `?v=YYYYMMDD-N` cache-busting query strings. Bump the suffix whenever an asset changes, then purge the Cloudflare cache for that URL.
+
+### Cloudflare-injected scripts
+
+If Lighthouse reports large JavaScript bundles, `cdn-cgi/challenge-platform`, `email-decode.min.js`, `cloudflareinsights.com`, or deprecated APIs such as `StorageType.persistent`, these are **injected by Cloudflare, not by this repository**. To remove them:
+
+* Disable **Bot Fight Mode / Super Bot Fight Mode** (or add a WAF skip rule for normal page views). This removes the challenge-platform JavaScript and the largest main-thread cost.
+* Disable **Email Address Obfuscation** if the email-decode script is not needed.
+* Disable **Web Analytics** if the Cloudflare Insights beacon is not needed.
+
+The page code itself only loads `assets/js/main.js` and, on Benpixel, `benpixel/assets/js/benpixel.js`.
+
+### Images
+
+The hero and project images are shipped as WebP with optimized JPEG fallbacks. The main hero is about 45 KiB WebP / 99 KiB JPEG; Benpixel's hero is about 37 KiB WebP / 109 KiB JPEG.
+

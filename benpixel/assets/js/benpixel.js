@@ -423,14 +423,14 @@
 
     const rect = beam.getBoundingClientRect();
     if (!rect.height) {
-      fill.style.height = '0%';
+      fill.style.transform = 'translateX(-50%) scaleY(0)';
       return;
     }
 
     const start = window.innerHeight * 0.82;
     const end = window.innerHeight * 0.18;
     const progress = Math.min(1, Math.max(0, (start - rect.top) / (rect.height + start - end)));
-    fill.style.height = `${Math.round(progress * 100)}%`;
+    fill.style.transform = `translateX(-50%) scaleY(${progress})`;
   }
 
   function layoutHistory() {
@@ -450,8 +450,7 @@
       entry.style.width = '';
     });
     timeline.style.height = '';
-    if (beam) beam.style.height = '';
-
+    if (beam) { beam.style.height = ''; beam.style.removeProperty('--beam-height'); }
     if (!isDesktop) {
       updateBeamFill();
       return;
@@ -486,7 +485,10 @@
 
     const beamHeight = maxNodeY + 32;
     timeline.style.height = `${maxY + 24}px`;
-    if (beam) beam.style.height = `${beamHeight}px`;
+    if (beam) {
+      beam.style.height = `${beamHeight}px`;
+      beam.style.setProperty('--beam-height', `${beamHeight}px`);
+    }
     updateBeamFill();
   }
 
