@@ -1499,3 +1499,11 @@ body.bp-modal-open {
     font-size: 12px;
   }
 }
+
+.bp-community-note {
+  margin: -8px 0 22px;
+  font-size: 12px;
+  line-height: 1.6;
+  letter-spacing: 0.02em;
+  color: var(--ink-2);
+}

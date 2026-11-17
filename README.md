@@ -26,8 +26,7 @@ This repository contains the complete source code for [ben-ghosti.de](https://be
 | Component / Sub-Page | Route | Description | Status |
 | :--- | :--- | :--- | :--- |
 | **🌐 Central Hub** | `/index.html` | Core landing page displaying skills, custom workstation builds, and link matrix. | Live |
-| **🎓 School Stuff** | `/school/` | Integrated document management, custom stylesheets, and structured digital school notes. | New |
-| **🤝 Sponsors** | `/sponsors.html` | Overview of hardware suppliers, software partners, and infrastructure supporters. | Live |
+| **🤝 Supporters** | `/sponsors.html` | Overview of hardware suppliers, software partners, and infrastructure supporters. | Live |
 | **📈 System Status** | `/status.html` | Real-time health monitoring of local storage layers and self-hosted environments. | Live |
 | **🎮 Benpixel** | `/benpixel/` | Seasonal Minecraft server page with live status, season metadata, countdown, and join instructions. | New |
 
@@ -52,9 +51,6 @@ The integrated system status dashboard aggregates availability data directly fro
 │   ├── fonts/              # Locally hosted performance-optimized webfonts
 │   ├── images/             # Compressed image assets (Glacier Workstation, server racks)
 │   └── js/                 # Pure Vanilla JavaScript framework (main.js)
-├── school/                 # Sub-Directory: Academic document repository
-│   ├── style.css           # Custom school layout styling
-│   └── math.html           # Embedded math & documentation stack
 ├── benpixel/               # Sub-Directory: Seasonal Minecraft server page
 │   ├── index.html          # Benpixel landing page
 │   ├── season.json         # Season metadata (edit per season)
@@ -62,7 +58,7 @@ The integrated system status dashboard aggregates availability data directly fro
 │   └── assets/             # Page-specific CSS, JS, and images
 ├── index.html              # Main entry point & production hub
 ├── status.html             # System status portal
-├── sponsors.html           # Partner index
+├── sponsors.html           # Supporters index
 └── README.md               # System documentation
 
 
@@ -119,13 +115,21 @@ Discord: Ben_Ghosti (Open for technical exchange and lab discussions)
 
 ## ⚖️License
 
+This repository is **source-available, not open source**. It is licensed under the [PolyForm Strict License 1.0.0](LICENSE).
+
+You may view the source and use it for noncommercial purposes. You may **not** modify it or distribute it. Public hosting, deployment, or making the code available as a website is distribution and is not permitted. For permission, contact info@ben-ghosti.de.
+
+GitHub's viewing and forking features are provided under GitHub's Terms of Service. A fork does not grant any right to use, modify, distribute, or host this code; any fork remains subject to this license.
+
+Third-party components are listed in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+
 © 2026 BenGhosti. All rights reserved.
 
 ---
 
 ## Performance & Cloudflare
 
-The production site is served through Cloudflare. The repo ships a [`_headers`](_headers) file for Cloudflare Pages/Netlify; if the origin is GitHub Pages behind Cloudflare, add a **Cache Rule** instead. Two things matter for repeat visits and Lighthouse:
+The production site is served through Cloudflare. The repo ships a [`_headers`](_headers) file for Cloudflare Pages/Netlify; if the origin is GitHub Pages behind Cloudflare, add a **Cache Rule** instead. Cloudflare Web Analytics is enabled for cookieless, aggregate traffic measurement (no analytics cookies, no cross-site profiles); the privacy disclosure is in [`legal.html`](legal.html). Two things matter for repeat visits and Lighthouse:
 
 ### Static asset caching
 
